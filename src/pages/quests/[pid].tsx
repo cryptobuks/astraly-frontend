@@ -16,6 +16,7 @@ import {
 } from '@chakra-ui/react';
 import styles from '../../styles/pid.module.scss';
 import ReactPlayer from 'react-player';
+import Requirements from 'components/Requirements';
 
 const QuestPage = () => {
   const router = useRouter();
@@ -59,7 +60,27 @@ const QuestPage = () => {
       </Flex>
       <Flex className="Container Project" flexDir={'row'} gridGap="20px">
         <Flex className="Left Container" width={'70%'} flexDir="column">
-          <Flex></Flex>
+          <Requirements ZKPLocked KYC />
+          <Flex
+            flexDir={'row'}
+            bg="#FAF3FF"
+            border={'solid 2px #fff'}
+            padding="20px"
+            mt={'20px'}
+            borderRadius="24px"
+            gridGap={'20px'}
+          >
+            <Image src="/assets/imgs/boosterPurple.png" height={'20px'} my="auto" />
+            <Flex flexDir={'column'}>
+              <Text fontSize="16px" lineHeight="22px" color="#370063">
+                <span style={{fontWeight: '900'}}>Booster Quests</span> are optional but provide you
+                with a multiplier of the numbers of tickets you can get.
+              </Text>
+              <Text>
+                It's also a great opportunity to learn more about the product by using it.
+              </Text>
+            </Flex>
+          </Flex>
         </Flex>
         <Image src="/assets/imgs/divider.png" height={'630px'} zIndex="100" mt="auto" mb="auto" />
         <Flex className="Right Container" width={'30%'} flexDir="column" gridGap={'16px'}>

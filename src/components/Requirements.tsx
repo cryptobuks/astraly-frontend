@@ -1,7 +1,7 @@
 import {Button, Flex, Image, Text} from '@chakra-ui/react';
 import React from 'react';
 
-const Requirements = () => {
+const Requirements = ({KYC, ZKPLocked}: any) => {
   return (
     <Flex
       width={'100%'}
@@ -47,19 +47,36 @@ const Requirements = () => {
         </Text>
       </Flex>
       <Flex flexDir={'row'} padding="25px" gridGap={'16px'}>
-        <Button
-          leftIcon={<Image src="/assets/imgs/checked.png" height="20px" />}
-          bg="linear-gradient(360deg, #7E1AFF 0%, #9F24FF 50%)"
-          borderRadius="16px"
-          boxShadow="0px 20px 35px rgba(55, 0, 99, 0.2)"
-          width="100%"
-          fontFamily="Druk Wide Web"
-          py="25px"
-          color="white"
-          _hover={{bg: 'linear-gradient(360deg, #7E1AFF 0%, #9F24FF 50%)'}}
-        >
-          Submit your KYC
-        </Button>
+        {KYC && (
+          <Button
+            leftIcon={<Image src="/assets/imgs/checked.png" height="20px" />}
+            bg="linear-gradient(360deg, #7E1AFF 0%, #9F24FF 50%)"
+            borderRadius="16px"
+            boxShadow="0px 20px 35px rgba(55, 0, 99, 0.2)"
+            width="100%"
+            fontFamily="Druk Wide Web"
+            py="25px"
+            color="white"
+            _hover={{bg: 'linear-gradient(360deg, #7E1AFF 0%, #9F24FF 50%)'}}
+          >
+            Submit your KYC
+          </Button>
+        )}
+        {ZKPLocked && (
+          <Button
+            leftIcon={<Image src="/assets/imgs/locker.png" height="20px" />}
+            bg="linear-gradient(360deg, #7E1AFF 0%, #9F24FF 50%)"
+            borderRadius="16px"
+            boxShadow="0px 20px 35px rgba(55, 0, 99, 0.2)"
+            width="100%"
+            fontFamily="Druk Wide Web"
+            py="25px"
+            color="white"
+            _hover={{bg: 'linear-gradient(360deg, #7E1AFF 0%, #9F24FF 50%)'}}
+          >
+            Lock more ZKP
+          </Button>
+        )}
       </Flex>
     </Flex>
   );
