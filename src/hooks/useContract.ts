@@ -17,7 +17,7 @@ export default () => {
       const networkName = isMainnet ? 'mainnet-alpha' : 'goerli-alpha'
       const provider = new Provider({ network: networkName })
 
-      return new Contract(address, abi, provider)
+      return new Contract(abi, address, provider)
     },
     [account]
   )
