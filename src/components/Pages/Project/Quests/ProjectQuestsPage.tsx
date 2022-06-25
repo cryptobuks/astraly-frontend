@@ -17,7 +17,7 @@ const ProjectQuestsPage = () => {
 
   const { data } = useQuery(PROJECT, {
     variables: {
-      _id: pid,
+      idoId: pid,
     },
   })
 

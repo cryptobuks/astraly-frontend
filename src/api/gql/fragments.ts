@@ -11,6 +11,7 @@ export const ProjectFragment = gql`
     totalRaise
     maxAllocation
     currentRoundIndex
+    tokenPrice
     type
     categories
     rounds {

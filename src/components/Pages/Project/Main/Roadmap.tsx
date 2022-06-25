@@ -36,7 +36,7 @@ const RoadmapItem = ({
   }, [project.currentRoundIndex])
 
   const ButtonText = isFuture ? 'Not available yet' : stepText[isPast ? 1 : 0]
-  const href = `/project/${project._id}/${stepText[2]}`
+  const href = `/project/${project.idoId}/${stepText[2]}`
 
   return (
     <div

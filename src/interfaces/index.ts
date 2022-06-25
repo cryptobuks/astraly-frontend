@@ -12,6 +12,7 @@ type ProjectType = 'IDO' | 'LBP' | 'GDA'
 
 export interface Project {
   _id: number
+  idoId: number
   name?: string
   description?: string
   ticker?: string

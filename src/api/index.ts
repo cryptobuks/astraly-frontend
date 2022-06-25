@@ -10,7 +10,7 @@ import { ApolloClient, InMemoryCache, gql, ApolloLink, concat, HttpLink } from '
 export const useApi = () => {
   const apiUrl = isMainnet
     ? 'https://zkpad-api.herokuapp.com/api/graphql'
-    : 'https://zkpad-api.herokuapp.com/api/graphql'
+    : 'http://localhost:4004/api/graphql'
 
   const httpLink = new HttpLink({ uri: apiUrl })
 
@@ -149,5 +149,5 @@ export const useApi = () => {
       })
       .then(({ data }) => data.searchProjects)
   }
-  return { getAuthToken, getAccountDetails, validateQuest, fetchProof }
+  return { getAuthToken, getAccountDetails, validateQuest, fetchProof, searchProjects }
 }

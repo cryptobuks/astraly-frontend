@@ -12,8 +12,8 @@ export const SEARCH_PROJECTS = gql`
 
 export const PROJECT = gql`
   ${ProjectFragment}
-  query Project($_id: String!) {
-    project(_id: $_id) {
+  query Project($idoId: String!) {
+    project(idoId: $idoId) {
       ...Project
     }
   }

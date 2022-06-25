@@ -13,7 +13,7 @@ const ProjectPortfolioPage = () => {
   const [project, setProject] = useState<Project | undefined>(undefined)
   const { data } = useQuery(PROJECT, {
     variables: {
-      _id: pid,
+      idoId: pid,
     },
   })
 

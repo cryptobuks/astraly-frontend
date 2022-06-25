@@ -38,7 +38,7 @@ const ProjectClaimPage = () => {
 
   const { data } = useQuery(PROJECT, {
     variables: {
-      _id: pid,
+      idoId: pid,
     },
   })
 
@@ -49,7 +49,7 @@ const ProjectClaimPage = () => {
   const handleClaimTickets = async () => {
     try {
       setClaiming(true)
-      const tx = await claimLotteryTickets(project?._id.toString())
+      const tx = await claimLotteryTickets(project?.idoId.toString())
       addTransaction(
         tx,
         'Claim Tickets',
@@ -73,7 +73,7 @@ const ProjectClaimPage = () => {
       )
       setXZkpBalance(_xformattedBalance)
 
-      const _ticketsBalance = await getTicketsBalance(account?.address, project?._id.toString())
+      const _ticketsBalance = await getTicketsBalance(account?.address, project?.idoId.toString())
       setTicketsBalance(uint256.uint256ToBN(_ticketsBalance.balance).toString())
 
       setLoading(false)

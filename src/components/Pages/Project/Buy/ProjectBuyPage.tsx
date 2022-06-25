@@ -27,7 +27,7 @@ const ProjectBuyPage = () => {
   const [project, setProject] = useState<Project | undefined>(undefined)
   const { data } = useQuery(PROJECT, {
     variables: {
-      _id: pid,
+      idoId: pid,
     },
   })
 
@@ -64,7 +64,7 @@ const ProjectBuyPage = () => {
 
     try {
       setPurchasing(true)
-      const tx = await participate(ethValue, project?._id.toString(), account)
+      const tx = await participate(ethValue, project?.idoId.toString(), account)
       addTransaction(tx, 'Participate', updateBalance, () => {})
       setPurchasing(false)
     } catch (error) {
@@ -91,10 +91,10 @@ const ProjectBuyPage = () => {
       )
       setETHBalance(_formattedBalance)
 
-      const _userInfo = await getUserInfo(account?.address, project?._id.toString())
+      const _userInfo = await getUserInfo(account?.address, project?.idoId.toString())
       setUserInfo(_userInfo)
 
-      const _currentSale = await getCurrentSale(project?._id.toString())
+      const _currentSale = await getCurrentSale(project?.idoId.toString())
       setCurrentSale(_currentSale)
       setLoading(false)
     } catch (error) {
@@ -118,7 +118,7 @@ const ProjectBuyPage = () => {
   }
 
   useEffect(() => {
-    if (account?.address && project?._id) {
+    if (account?.address && project?.idoId) {
       updateBalance()
     }
   }, [account, project])

@@ -1,4 +1,3 @@
-import { projects } from 'utils/data'
 import ProjectCard from './ProjectCard'
 import { useEffect, useRef, useState } from 'react'
 import VueScrollTo from 'vue-scrollto'

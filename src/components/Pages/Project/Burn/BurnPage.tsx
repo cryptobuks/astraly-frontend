@@ -47,7 +47,7 @@ const BurnPage = () => {
 
   const { data } = useQuery(PROJECT, {
     variables: {
-      _id: pid,
+      idoId: pid,
     },
   })
 
@@ -96,11 +96,11 @@ const BurnPage = () => {
   const fetchBalances = async () => {
     try {
       setLoading(true)
-      const _ticketsBalance = await getTicketsBalance(account?.address, project?._id.toString())
+      const _ticketsBalance = await getTicketsBalance(account?.address, project?.idoId.toString())
       // console.log(_ticketsBalance)
       setTicketsBalance(uint256.uint256ToBN(_ticketsBalance.balance).toString())
 
-      const _userInfo = await getUserInfo(account?.address, project?._id.toString())
+      const _userInfo = await getUserInfo(account?.address, project?.idoId.toString())
       setUserInfo(_userInfo)
 
       setLoading(false)

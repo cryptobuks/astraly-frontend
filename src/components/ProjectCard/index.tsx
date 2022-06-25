@@ -45,7 +45,7 @@ const ProjectCard = ({ project }: Props) => {
   }, [])
 
   return (
-    <Link href={`/project/${project._id}`}>
+    <Link href={`/project/${project.idoId}`}>
       <Box
         w={'310px'}
         bg={useColorModeValue('white', 'gray.400')}

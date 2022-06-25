@@ -16,7 +16,7 @@ const ProjectPage = () => {
   const [project, setProject] = useState<Project | undefined>(undefined)
   const { loading, error, data } = useQuery(PROJECT, {
     variables: {
-      _id: pid,
+      idoId: pid,
     },
   })
 
