@@ -28,9 +28,9 @@ const BurnContainer = () => {
   const { pid } = router.query
   const [project, setProject] = useState<Project | undefined>(undefined)
 
-  useEffect(() => {
-    setProject(projects.find((p) => p.id === Number(pid)))
-  }, [pid])
+  // useEffect(() => {
+  //   setProject(projects.find((p) => p.id === Number(pid)))
+  // }, [pid])
   return (
     <Layout>
       <Breadcrumb color={'#9D69DE'}>

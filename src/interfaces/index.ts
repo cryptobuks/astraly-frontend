@@ -11,7 +11,7 @@ export interface Round {
 type ProjectType = 'IDO' | 'LBP' | 'GDA'
 
 export interface Project {
-  id: number
+  _id: number
   name?: string
   description?: string
   ticker?: string
@@ -20,7 +20,7 @@ export interface Project {
   totalRaise?: number
   tokenPrice: number
   maxAllocation?: number
-  currentRoundId: number
+  currentRoundIndex: number
   type?: ProjectType
   categories?: string[]
   rounds: Round[]

@@ -16,9 +16,7 @@ const launchpad: NextPage = () => {
             </h1>
 
             <div className="filter ml-auto flex items-center">
-              <div className="mr-4">
-                <SearchInput />
-              </div>
+              <div className="mr-4"></div>
 
               <Filter />
             </div>

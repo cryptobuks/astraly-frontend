@@ -7,15 +7,23 @@ import AllocationInfo from '../Main/AllocationInfo'
 import QuestRequirements from './QuestRequirements'
 import Quests from './Quests'
 import Lightning from 'assets/icons/solid/Lightning-alt.svg'
+import { useQuery } from '@apollo/client'
+import { PROJECT } from '../../../../api/gql/querries'
 
 const ProjectQuestsPage = () => {
   const router = useRouter()
   const { pid } = router.query
   const [project, setProject] = useState<Project | undefined>(undefined)
 
+  const { data } = useQuery(PROJECT, {
+    variables: {
+      _id: pid,
+    },
+  })
+
   useEffect(() => {
-    setProject(projects.find((p) => p.id === Number(pid)))
-  }, [pid])
+    data && setProject(data.project)
+  }, [data])
 
   if (!project) {
     return <></>

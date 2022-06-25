@@ -49,7 +49,7 @@ const ProjectCard = ({ project, index }: { project: Project; index: number }) =>
   }, [])
 
   return (
-    <Link href={`/project/${project.id}`}>
+    <Link href={`/project/${project._id}`}>
       <div
         className="ProjectCard bg-white rounded-3xl w-90 shrink-0 relative hover:shadow-purpleDark transition-all cursor-pointer hover:border-primary"
         data-index={index}>

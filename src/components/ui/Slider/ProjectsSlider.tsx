@@ -5,6 +5,7 @@ import VueScrollTo from 'vue-scrollto'
 import _ from 'lodash'
 import Container from '../Container'
 import Chevron from 'assets/icons/Chevron.svg?inline'
+import { Project } from '../../../interfaces'
 
 const itemClass = 'ProjectCard'
 
@@ -32,7 +33,7 @@ const ArrowButton = ({
   )
 }
 
-const ProjectsSlider = () => {
+const ProjectsSlider = ({ projects }: { projects?: Project[] }) => {
   const [current, setCurrent] = useState(0)
   const container = useRef<HTMLDivElement>(null)
   const refContainer = useRef(null)
@@ -45,7 +46,7 @@ const ProjectsSlider = () => {
 
   useEffect(() => {
     const c = container.current
-    if (!c) {
+    if (!c || !projects) {
       return
     }
     const first = c.querySelector(`.${itemClass}`)
@@ -112,6 +113,10 @@ const ProjectsSlider = () => {
   }, [current])
 
   const scrollTo = () => {
+    if (!projects) {
+      return
+    }
+
     if (current < 0) {
       setCurrent(0)
       return
@@ -154,9 +159,10 @@ const ProjectsSlider = () => {
       <div className="w-full overflow-auto py-8 no-scrollbar pb-14" ref={container}>
         <Container>
           <div className="PackSlider flex flex-nowrap gap-6">
-            {projects.map((project, index) => (
-              <ProjectCard project={project} key={`${project.ticker}-${index}`} index={index} />
-            ))}
+            {projects &&
+              projects.map((project, index) => (
+                <ProjectCard project={project} key={`${project.ticker}-${index}`} index={index} />
+              ))}
             <div className="w-20 shrink-0"></div>
           </div>
         </Container>

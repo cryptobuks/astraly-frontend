@@ -7,7 +7,7 @@ import {
   Image,
   Stack,
   Text,
-  useColorModeValue
+  useColorModeValue,
 } from '@chakra-ui/react'
 import { Project } from 'interfaces'
 import Link from 'next/link'
@@ -45,7 +45,7 @@ const ProjectCard = ({ project }: Props) => {
   }, [])
 
   return (
-    <Link href={`/project/${project.id}`}>
+    <Link href={`/project/${project._id}`}>
       <Box
         w={'310px'}
         bg={useColorModeValue('white', 'gray.400')}

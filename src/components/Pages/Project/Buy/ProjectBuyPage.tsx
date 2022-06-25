@@ -17,12 +17,19 @@ import { Spinner } from '@chakra-ui/react'
 import { useAppDispatch } from 'hooks/hooks'
 import ToastActions from 'actions/toast.actions'
 import { ToastState } from 'components/ui/Toast/utils'
+import { useQuery } from '@apollo/client'
+import { PROJECT } from '../../../../api/gql/querries'
 
 const ProjectBuyPage = () => {
   const router = useRouter()
   const { account } = useStarknetReact()
   const { pid } = router.query
   const [project, setProject] = useState<Project | undefined>(undefined)
+  const { data } = useQuery(PROJECT, {
+    variables: {
+      _id: pid,
+    },
+  })
 
   const [ethValue, setEthValue] = useState('0')
   const [ethBalance, setETHBalance] = useState('0')
@@ -57,7 +64,7 @@ const ProjectBuyPage = () => {
 
     try {
       setPurchasing(true)
-      const tx = await participate(ethValue, project?.id.toString(), account)
+      const tx = await participate(ethValue, project?._id.toString(), account)
       addTransaction(tx, 'Participate', updateBalance, () => {})
       setPurchasing(false)
     } catch (error) {
@@ -84,10 +91,10 @@ const ProjectBuyPage = () => {
       )
       setETHBalance(_formattedBalance)
 
-      const _userInfo = await getUserInfo(account?.address, project?.id.toString())
+      const _userInfo = await getUserInfo(account?.address, project?._id.toString())
       setUserInfo(_userInfo)
 
-      const _currentSale = await getCurrentSale(project?.id.toString())
+      const _currentSale = await getCurrentSale(project?._id.toString())
       setCurrentSale(_currentSale)
       setLoading(false)
     } catch (error) {
@@ -111,14 +118,14 @@ const ProjectBuyPage = () => {
   }
 
   useEffect(() => {
-    if (account?.address && project?.id) {
+    if (account?.address && project?._id) {
       updateBalance()
     }
   }, [account, project])
 
   useEffect(() => {
-    setProject(projects.find((p) => p.id === Number(pid)))
-  }, [pid])
+    data && setProject(data.project)
+  }, [data])
 
   if (!project) {
     return <></>

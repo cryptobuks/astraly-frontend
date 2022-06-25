@@ -17,6 +17,8 @@ import { Spinner } from '@chakra-ui/react'
 import { LockIcon, SendIcon } from '../../../ui/Icons/Icons'
 import Link from 'next/link'
 import { useTransactions } from 'context/TransactionsProvider'
+import { useQuery } from '@apollo/client'
+import { PROJECT } from '../../../../api/gql/querries'
 
 const ProjectClaimPage = () => {
   const router = useRouter()
@@ -34,14 +36,20 @@ const ProjectClaimPage = () => {
 
   const { addTransaction } = useTransactions()
 
+  const { data } = useQuery(PROJECT, {
+    variables: {
+      _id: pid,
+    },
+  })
+
   useEffect(() => {
-    setProject(projects.find((p) => p.id === Number(pid)))
-  }, [pid])
+    data && setProject(data.project)
+  }, [data])
 
   const handleClaimTickets = async () => {
     try {
       setClaiming(true)
-      const tx = await claimLotteryTickets(project?.id.toString())
+      const tx = await claimLotteryTickets(project?._id.toString())
       addTransaction(
         tx,
         'Claim Tickets',
@@ -65,7 +73,7 @@ const ProjectClaimPage = () => {
       )
       setXZkpBalance(_xformattedBalance)
 
-      const _ticketsBalance = await getTicketsBalance(account?.address, project?.id.toString())
+      const _ticketsBalance = await getTicketsBalance(account?.address, project?._id.toString())
       setTicketsBalance(uint256.uint256ToBN(_ticketsBalance.balance).toString())
 
       setLoading(false)

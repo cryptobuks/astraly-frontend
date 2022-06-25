@@ -656,7 +656,7 @@ const ProjectPageContainer = () => {
   //                 borderRadius="full"
   //                 alignItems="center"
   //                 justifyContent="center"
-  //                 bg={project.currentRoundId === index ? 'purple.700' : 'purple.800'}
+  //                 bg={project.currentRoundIndex === index ? 'purple.700' : 'purple.800'}
   //                 w="50px"
   //                 h="50px"
   //                 mb={5}>
