@@ -33,7 +33,7 @@ const ProjectBuyPage = () => {
   const [ethValue, setEthValue] = useState('0')
   const [ethBalance, setETHBalance] = useState('0')
   const [zkpValue, setZkpValue] = useState('0')
-  const [userInfo, setUserInfo] = useState<Result>({} as Result)
+  const [userInfo, setUserInfo] = useState<Result | null>(null)
   const [currentSale, setCurrentSale] = useState<Result | null>(null)
   // const [allocation, setAllocation] = useState(0)
   const [purchasing, setPurchasing] = useState(false)
@@ -95,6 +95,7 @@ const ProjectBuyPage = () => {
 
       const _currentSale = await getCurrentSale(project?.idoId.toString())
       setCurrentSale(_currentSale)
+
       setLoading(false)
     } catch (error) {
       setLoading(false)
@@ -117,7 +118,7 @@ const ProjectBuyPage = () => {
   }
 
   useEffect(() => {
-    if (account?.address && project?.idoId) {
+    if (account?.address && project) {
       updateBalance()
     }
   }, [account, project])
@@ -173,8 +174,19 @@ const ProjectBuyPage = () => {
                 <div className="text-primaryClear">Your allocation</div>
                 <div className="font-heading text-primary">
                   ${project.ticker}{' '}
-                  {allocation ? (
+                  {allocation && userInfo ? (
                     uint256.uint256ToBN(userInfo.tickets).toNumber() * allocation
+                  ) : (
+                    <Spinner />
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-16">
+                <div className="text-primaryClear">Your amount bought</div>
+                <div className="font-heading text-primary">
+                  ${project.ticker}{' '}
+                  {userInfo ? (
+                    uint256.uint256ToBN(userInfo.participation.amount_bought).toString()
                   ) : (
                     <Spinner />
                   )}
@@ -183,7 +195,14 @@ const ProjectBuyPage = () => {
             </div>
 
             <div className="block__item">
-              <BaseButton onClick={handleParticipate} disabled={purchasing}>
+              <BaseButton
+                onClick={handleParticipate}
+                disabled={
+                  purchasing ||
+                  (userInfo
+                    ? uint256.uint256ToBN(userInfo?.participation?.amount_bought).toNumber() > 0
+                    : false)
+                }>
                 {purchasing ? <Spinner /> : 'Participate'}
               </BaseButton>
             </div>
