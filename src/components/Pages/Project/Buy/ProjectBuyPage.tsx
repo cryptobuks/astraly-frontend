@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { Project } from '../../../../interfaces'
-import { projects } from '../../../../utils/data'
 import ProjectLayout from '../ProjectLayout'
 import AllocationInfo from '../Main/AllocationInfo'
 import BlockLabel from '../../../ui/BlockLabel'
