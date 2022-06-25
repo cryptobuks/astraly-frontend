@@ -114,5 +114,40 @@ export const useApi = () => {
       .then(({ data }) => data.getMerkleProof)
   }
 
-  return { getAuthToken, getAccountDetails, validateQuest, fetchProof }
+  const searchProjects = async (finished?: boolean, search?: string) => {
+    return client
+      .query({
+        variables: {
+          finished,
+          search,
+        },
+        query: gql`
+          query SearchProjects($finished: Boolean, $search: String) {
+            searchProjects(finished: $finished, search: $search) {
+              _id
+              name
+              description
+              ticker
+              logo
+              cover
+              totalRaise
+              maxAllocation
+              currentRoundIndex
+              type
+              categories
+              rounds {
+                title
+                description
+                startDate
+                endDate
+              }
+              idoId
+              isFinished
+            }
+          }
+        `,
+      })
+      .then(({ data }) => data.searchProjects)
+  }
+  return { getAuthToken, getAccountDetails, validateQuest, fetchProof, searchProjects }
 }
