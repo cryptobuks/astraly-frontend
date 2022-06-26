@@ -18,14 +18,18 @@ const LockPage = () => {
   const [lpBalance, setLPBalance] = useState('0')
   const [xzkpBalance, setXZkpBalance] = useState('0')
 
-  const { balances, updateUserData } = useWallet()
+  const { balances, deposits, updateUserData } = useWallet()
 
+  // const [userInfo, setUserInfo] = useState<Result>({} as Result)
+
+  // Stake Info
   const [stakeInfo, setStakeInfo] = useState<Result>({} as Result)
-  const [userInfo, setUserInfo] = useState<Result>({} as Result)
   const [lpStaked, setLPStaked] = useState<string | null>(null)
   const [zkpStaked, setZKPStaked] = useState<string | null>(null)
+
   const [currentAPY, setCurrentAPY] = useState(0)
-  const { getUserStakeInfo, getStakingAPY, getUserInfo, getUserDeposit } = useStakingContract()
+
+  const { getUserStakeInfo, getStakingAPY } = useStakingContract()
 
   const unlockRemainingTime = useMemo(
     () => new Date(stakeInfo?.unlock_time?.toNumber() * 1000).getTime() - new Date().getTime(),
@@ -50,24 +54,6 @@ const LockPage = () => {
       const _stakeInfo = await getUserStakeInfo(account?.address)
       // console.log(_stakeInfo);
       setStakeInfo(_stakeInfo)
-
-      const _userInfo = await getUserInfo(account?.address)
-      // console.log(_userInfo)
-      setUserInfo(_userInfo)
-
-      const _lpStaked = await getUserDeposit(account?.address, Contracts['SN_GOERLI'].lp_token)
-      const _formattedLPStaked = ethers.utils.formatUnits(
-        uint256.uint256ToBN(_lpStaked.amount).toString(),
-        'ether'
-      )
-      setLPStaked(_formattedLPStaked)
-
-      const _zkpStaked = await getUserDeposit(account?.address, Contracts['SN_GOERLI'].token)
-      const _formattedZKPStaked = ethers.utils.formatUnits(
-        uint256.uint256ToBN(_zkpStaked.amount).toString(),
-        'ether'
-      )
-      setZKPStaked(_formattedZKPStaked)
     } catch (e) {
       console.error(e)
     }
@@ -91,6 +77,11 @@ const LockPage = () => {
     setXZkpBalance(balances[Contracts['SN_GOERLI'].staking]?.normalized)
     setLPBalance(balances[Contracts['SN_GOERLI'].lp_token]?.normalized)
   }, [balances])
+
+  useEffect(() => {
+    setZKPStaked(deposits[Contracts['SN_GOERLI'].token]?.normalized)
+    setLPStaked(deposits[Contracts['SN_GOERLI'].lp_token]?.normalized)
+  }, [deposits])
 
   return (
     <div className="LockPage mb-10">
@@ -119,7 +110,6 @@ const LockPage = () => {
               xzkpBalance={xzkpBalance}
               unlockRemainingTime={unlockRemainingTime}
               stakeInfo={stakeInfo}
-              userInfo={userInfo}
               lpStaked={lpStaked}
               zkpStaked={zkpStaked}
               onSuccess={updateAll}
