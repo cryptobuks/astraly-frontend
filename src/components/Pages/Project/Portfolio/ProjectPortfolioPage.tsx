@@ -16,6 +16,8 @@ import { Spinner } from '@chakra-ui/react'
 import { uint256ToBN } from 'starknet/utils/uint256'
 import { Area, AreaChart, ComposedChart, Legend, Line, Tooltip, XAxis, YAxis } from 'recharts'
 import { add, differenceInCalendarDays, format } from 'date-fns'
+import { useStarknetReact } from '@web3-starknet-react/core'
+import { Result } from 'starknet'
 
 const dateFormatter = (date: number) => {
   return format(new Date(date), 'dd/MMM')
@@ -38,6 +40,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 const ProjectPortfolioPage = () => {
   const router = useRouter()
+  const { account } = useStarknetReact()
   const { pid } = router.query
   const [project, setProject] = useState<Project | undefined>(undefined)
   const { data } = useQuery(PROJECT, {
@@ -54,16 +57,14 @@ const ProjectPortfolioPage = () => {
   } = useIDOContract()
   const { addTransaction } = useTransactions()
 
-  const [selectedPortions, setSelectedPortions] = useState<number[]>([1])
+  // const [selectedPortions, setSelectedPortions] = useState<number[]>([1])
   const [vestingPercents, setVestingPercents] = useState<number[]>([])
   const [unlockTimes, setUnlockTimes] = useState<Date[]>([])
 
-  // const [ticks, setTicks] = useState<number[]>([])
-  const [graphData, setGraphData] = useState<any[] | null>(null)
-  // const [domain, setDomain] = useState<any>(null)
-
   const [withdrawing, setWithdrawing] = useState(false)
   const [loading, setLoading] = useState(false)
+
+  const [userInfo, setUserInfo] = useState<Result>({} as Result)
 
   const currentPortion = useMemo(
     () =>
@@ -73,6 +74,17 @@ const ProjectPortfolioPage = () => {
       ),
     [unlockTimes]
   )
+
+  const graphData = useMemo(() => {
+    return [
+      ...unlockTimes.map((_time, index) => {
+        return {
+          date: _time.getTime(),
+          vestingPercent: vestingPercents[index],
+        }
+      }),
+    ]
+  }, [unlockTimes, vestingPercents])
 
   const dispatch = useAppDispatch()
 
@@ -94,28 +106,6 @@ const ProjectPortfolioPage = () => {
       setVestingPercents(_percents)
       setUnlockTimes(_unlockTimes)
 
-      // Update Graph Data
-      // const _ticks = getTicks(
-      //   _unlockTimes[0],
-      //   _unlockTimes[_numberVestingPortions.res - 1],
-      //   _unlockTimes.length
-      // )
-      // setTicks(_ticks)
-      const _data = [
-        ..._unlockTimes.map((_time, index) => {
-          return {
-            date: _time.getTime(),
-            vestingPercent: _percents[index],
-          }
-        }),
-      ]
-      setGraphData(_data)
-      // const _domain = [
-      //   (dataMin: any) => dataMin,
-      //   () => _unlockTimes[_numberVestingPortions.res - 1].getTime(),
-      // ]
-      // setDomain(_domain)
-
       setLoading(false)
     } catch (error) {
       console.error(error)
@@ -131,14 +121,26 @@ const ProjectPortfolioPage = () => {
     }
   }, [getNumberVestingPortions, getVestingPercent, getVestingUnlockTime])
 
+  const updateUserInfo = useCallback(async () => {
+    try {
+      const _userInfo = await getUserInfo(account?.address, project?.idoId.toString())
+      setUserInfo(_userInfo)
+    } catch (e) {
+      console.error(e)
+    }
+  }, [getUserInfo])
+
   const handleWithdraw = async () => {
     try {
       setWithdrawing(true)
-      const tx = await withdrawTokens(project?.idoId.toString(), [1])
+      const tx = await withdrawTokens(
+        project?.idoId.toString(),
+        Array.from({ length: currentPortion }, (v, i) => i + 1)
+      )
       addTransaction(
         tx,
         'Withdraw Tokens',
-        () => undefined,
+        () => updateUserInfo(),
         () => undefined
       )
       setWithdrawing(false)
@@ -163,6 +165,7 @@ const ProjectPortfolioPage = () => {
   useEffect(() => {
     if (project) {
       updateVestingInfo()
+      updateUserInfo()
     }
   }, [project])
 
@@ -175,9 +178,9 @@ const ProjectPortfolioPage = () => {
       <ProjectLayout project={project}>
         <div className="block">
           <div className="block--contrast">
-            <div className="title--medium mb-6">Distribution Info</div>
+            {/* <div className="title--medium mb-6">Distribution Info</div> */}
             <div>
-              {loading || !graphData ? (
+              {loading || graphData.length === 0 ? (
                 <Spinner color="#8F00FF" />
               ) : (
                 <AreaChart
@@ -205,9 +208,24 @@ const ProjectPortfolioPage = () => {
                 </AreaChart>
               )}
             </div>
+            <div className="title--medium mb-6 mt-6">Information</div>
+            <div className="flex items-center justify-between text-16 mb-0.5">
+              <div className="text-primaryClear">Currently released</div>
+              <div className="font-heading text-primary">
+                {currentPortion > 0 ? toPercent(vestingPercents[currentPortion - 1]) : '0%'}
+              </div>
+            </div>
+            <div className="flex items-center justify-between text-16 mb-0.5">
+              <div className="text-primaryClear">Last withdrawn</div>
+              <div className="font-heading text-primary">
+                {userInfo?.participation?.last_portion_withdrawn > 0
+                  ? toPercent(vestingPercents[userInfo.participation.last_portion_withdrawn - 1])
+                  : '0%'}
+              </div>
+            </div>
           </div>
           <div className="block__item">
-            <BaseButton onClick={handleWithdraw} disabled={withdrawing}>
+            <BaseButton onClick={handleWithdraw} disabled={withdrawing || currentPortion === 0}>
               <SendIcon className={'mr-2'} />
               {withdrawing ? <Spinner /> : 'Withdraw'}
             </BaseButton>
