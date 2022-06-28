@@ -2,16 +2,14 @@ import { useQuery } from '@apollo/client'
 import { PROJECTS } from '../../api/gql/querries'
 import { Project } from '../../interfaces'
 import Link from 'next/link'
+import Router from 'next/router'
 
 const index = () => {
   const { data, error } = useQuery(PROJECTS)
 
   if (error) {
-    return (
-      <div className="g-container">
-        <h1>not an admin yet</h1>
-      </div>
-    )
+    Router.replace('/404')
+    return <></>
   }
 
   const Project = ({ project }: { project: Project }) => {

@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client'
 import { IS_ADMIN, QUEST } from '../../../api/gql/querries'
-import { useRouter } from 'next/router'
+import Router, { useRouter } from 'next/router'
 import QuestForm from '../../../components/Admin/QuestForm'
 
 const QuestId = () => {
@@ -14,11 +14,8 @@ const QuestId = () => {
 
   const { error } = useQuery(IS_ADMIN)
   if (error) {
-    return (
-      <div className="g-container">
-        <h1>not an admin yet</h1>
-      </div>
-    )
+    Router.replace('/404')
+    return <></>
   }
 
   if (!data) {

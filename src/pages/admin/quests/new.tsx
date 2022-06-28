@@ -12,11 +12,8 @@ const newQuest = () => {
 
   const { error } = useQuery(IS_ADMIN)
   if (error) {
-    return (
-      <div className="g-container">
-        <h1>not an admin yet</h1>
-      </div>
-    )
+    router.replace('/404')
+    return <></>
   }
 
   useEffect(() => {
