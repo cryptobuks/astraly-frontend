@@ -2,11 +2,22 @@ import QuestForm from '../../../components/Admin/QuestForm'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { Quest } from '../../../interfaces'
+import { useQuery } from '@apollo/client'
+import { IS_ADMIN } from '../../../api/gql/querries'
 
 const newQuest = () => {
   const router = useRouter()
   const { projectIdo } = router.query
   const [quest, setQuest] = useState({} as Quest)
+
+  const { error } = useQuery(IS_ADMIN)
+  if (error) {
+    return (
+      <div className="g-container">
+        <h1>not an admin yet</h1>
+      </div>
+    )
+  }
 
   useEffect(() => {
     setQuest({

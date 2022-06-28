@@ -49,3 +49,9 @@ export const QUEST = gql`
     }
   }
 `
+
+export const IS_ADMIN = gql`
+  query IsAdmin {
+    isAdmin
+  }
+`

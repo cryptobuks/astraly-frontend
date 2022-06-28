@@ -83,10 +83,16 @@ const QuestForm = ({ quest }: { quest: Quest }) => {
         ...questForm,
       }
 
-      if (subParent && index && subField) {
+      if (parent && subParent && index != null && subField) {
         // @ts-ignore
-        quest[parent][subParent][subField][index][field] = e.target.value as any
-      } else if (parent && subParent && index) {
+        if (!quest[parent][subParent][index][subField]) {
+          // @ts-ignore
+          quest[parent][subParent][index][subField] = {}
+        }
+
+        // @ts-ignore
+        quest[parent][subParent][index][subField][field] = e.target.value as any
+      } else if (parent && subParent && index != null) {
         // @ts-ignore
         quest[parent][subParent][index][field] = e.target.value as any
       } else if (parent) {
@@ -214,25 +220,25 @@ const QuestForm = ({ quest }: { quest: Quest }) => {
               <div className="text-18 font-bold">{index}</div>
               <BaseAdminInput
                 label={'name'}
-                value={questForm.event?.callData[index].name || ''}
+                value={callData.name || ''}
                 onChange={setField('name', 'event', 'callData', index)}
               />
 
               <BaseAdminInput
                 label={'type'}
-                value={questForm.event?.callData[index].type || ''}
-                onChange={setField('name', 'event', 'callData', index)}
+                value={callData.type || ''}
+                onChange={setField('type', 'event', 'callData', index)}
               />
 
               <BaseAdminInput
                 label={'low'}
-                value={questForm.event?.callData[index].value.low || ''}
+                value={callData.value.low || ''}
                 onChange={setField('low', 'event', 'callData', index, 'value')}
               />
 
               <BaseAdminInput
                 label={'high'}
-                value={questForm.event?.callData[index].value.high || ''}
+                value={callData.value.high || ''}
                 onChange={setField('high', 'event', 'callData', index, 'value')}
               />
             </div>

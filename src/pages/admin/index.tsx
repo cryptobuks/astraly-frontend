@@ -1,10 +1,18 @@
 import { useQuery } from '@apollo/client'
-import { PROJECTS, QUESTS } from '../../api/gql/querries'
+import { PROJECTS } from '../../api/gql/querries'
 import { Project } from '../../interfaces'
 import Link from 'next/link'
 
 const index = () => {
-  const { data } = useQuery(PROJECTS)
+  const { data, error } = useQuery(PROJECTS)
+
+  if (error) {
+    return (
+      <div className="g-container">
+        <h1>not an admin yet</h1>
+      </div>
+    )
+  }
 
   const Project = ({ project }: { project: Project }) => {
     return (
