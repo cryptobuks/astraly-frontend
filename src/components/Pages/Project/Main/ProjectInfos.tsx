@@ -72,14 +72,16 @@ const ProjectInfos: React.FC<{ project: Project }> = ({ project }) => {
         <div className="block__item">
           <div className="title--small">Admission</div>
           <p className="text-primaryClear">
-            Have ASTR tokens locked. On Astraly mainnet, the projects listed will be able to set
-            rules to participate in the fundraise like “have at least $2500 worth of assets in your
-            wallet” or “have used uniswap 5 times in the last 12 month”
+            <ol>
+              <li>Have locked $ASTR tokens</li>
+              <li>5 transactions on Uniswap in the last 6 month</li>
+              <li>Have at least 2500$ of tokens on your wallet</li>
+            </ol>
           </p>
         </div>
 
         <div className="block--contrast">
-          <div className="title--small mb-5">IDO Information</div>
+          <div className="title--small mb-5">IDO Resume</div>
 
           <div className="flex justify-between mb-4">
             <div className="text-primaryClear font-bold">Hardcap</div>

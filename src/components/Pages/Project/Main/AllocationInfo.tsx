@@ -2,7 +2,7 @@ const AllocationInfo = () => {
   return (
     <div className="AllocationInfo block">
       <div className="block--contrast">
-        <div className="title--medium mb-6">Get your allocation</div>
+        <div className="title--medium mb-6">Claim your tickets</div>
 
         <p className="text-primaryClear leading-138">
           We are excited to launch our IDO on Astraly. For a chance to win an allocation, please
