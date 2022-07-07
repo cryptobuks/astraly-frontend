@@ -1,17 +1,24 @@
-import { Flex, Heading, Text } from '@chakra-ui/react'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+
 import { useStarknetReact } from '@web3-starknet-react/core'
 import { useFaucetContract } from 'contracts'
 import { ethers } from 'ethers'
-import React, { useEffect, useState } from 'react'
 import { uint256 } from 'starknet'
 import { Contracts } from 'constants/networks'
-import { useSelector } from 'react-redux'
 import { RootState } from 'stores/reduxStore'
-import BaseButton from 'components/ui/buttons/BaseButton'
 import { WalletIcon, SwapIcon } from 'components/ui/Icons/Icons'
 import Chevron from 'assets/icons/Chevron.svg?inline'
 import { useTransactions } from 'context/TransactionsProvider'
 import LotteryTicket from 'assets/animations/lottery-ticket.gif'
+
+import BlockLabel from 'components/ui/BlockLabel'
+import BaseInput from 'components/ui/inputs/BaseInput'
+import BaseButton from 'components/ui/buttons/BaseButton'
+import Hexagon from 'components/ui/Hexagon'
+import Vertical from 'components/ui/Separator/Vertical'
+
+import ArrowDown from 'assets/icons/ArrowDown.svg?inline'
 
 const isMainnet = process.env.REACT_APP_ENV === 'MAINNET'
 const CHAIN = isMainnet ? 'SN_MAIN' : 'SN_GOERLI'
@@ -92,71 +99,75 @@ const BuyPageContainer = () => {
   }, [unlockTime])
 
   return (
-    // <Layout>
-    <Flex w="100vw" flexDir={['column', 'row']} gap="20px" justifyContent={'center'}>
-      <div className="flex flex-col gap-10">
-        <div className="block h-fit">
-          <div className="block--contrast">
-            <Heading size="sm" pb={5}>
-              Mint Amount: {mintAmount} ASTR
-            </Heading>
+    <div className="g-container">
+      <div className="lg:flex gap-6 mb-10">
+        <div className="col-end-3 col-start-1 w-full">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 mb-4">
+            <div className="block">
+              <div className="block--contrast">
+                <BlockLabel label="You have" value="100" onClick={() => {}} />
+                <BaseInput label="ETH" value="1" onChange={() => {}} />
+              </div>
+              <div className="flex items-center justify-center -my-4 text-primaryClear">
+                <Hexagon>
+                  <ArrowDown />
+                </Hexagon>
+              </div>
 
-            <BaseButton
-              onClick={handleTransfer}
-              disabled={!allowed}
-              className={'px-3 lg:px-12 group'}>
-              Mint
-            </BaseButton>
-            {!allowed && <Text>You will be able to mint again in {roundTimer}</Text>}
-          </div>
-          <div className="block__item">
-            <BaseButton
-              onClick={handleToWallet}
-              className={'px-3 lg:px-12 group'}
-              medium={true}
-              small>
-              <WalletIcon className={'mr-3'} />
-              Add ASTR to Wallet
-              <Chevron className={'ml-3 icon-right'} />
-            </BaseButton>
+              <div className="block__item">
+                <div className="text-primaryClear">You reseive</div>
+                <BaseInput label="ZKP" value="1000" onChange={() => {}} />
+              </div>
+            </div>
+
+            <div className="block xl:col-span-2">
+              <div className="block--contrast">
+                <div className="font-bold mb-2 text-primaryClear">Buy information</div>
+
+                <div className="flex items-center justify-between text-16 mb-0.5">
+                  <div className="text-primaryClear">Token price</div>
+                  <div className="font-heading text-primary">$ 0.01</div>
+                </div>
+
+                <div className="flex items-center justify-between text-16 mb-0.5">
+                  <div className="text-primaryClear">Schedule to claim ZKP</div>
+                  <div className="font-heading text-primary">100 ZKP every 6 hour</div>
+                </div>
+              </div>
+
+              <div className="block__item">
+                <BaseButton onClick={() => {}}>Claim tokens</BaseButton>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="block h-fit">
-          <div className="block--contrast">
-            <div className="title--medium mt-1">Trade $ASTR on other DEXs</div>
+
+        <div className="hidden lg:block">
+          <div className="sticky top-6 left-0">
+            <Vertical />
+          </div>
+        </div>
+
+        <div className="block">
+          <div className="block--contrast flex flex-col items-center">
+            <div className="title--medium mt-1">Trade NFT Lottery!</div>
+            <div className="title--small mt-1">You can buy and sell NFT lottery tickets!</div>
+            <img src={LotteryTicket.src} alt="lottery-ticket" width="250" />
           </div>
           <div className="block__item">
-            <a href="https://testnet.app.alpharoad.fi/" target="_blank" rel="noreferrer">
+            <a
+              href={`https://testnet.aspect.co/collection/${Contracts['SN_GOERLI'].lottery_token}`}
+              target="_blank"
+              rel="noreferrer">
               <BaseButton>
                 <SwapIcon className={'mr-3'} />
-                AlphaRoad
+                Trade NFT tickets
               </BaseButton>
             </a>
           </div>
         </div>
       </div>
-
-      <div className="block">
-        <div className="block--contrast flex flex-col items-center">
-          <div className="title--medium mt-1">Trade NFT Lottery!</div>
-          <div className="title--small mt-1">You can buy and sell NFT lottery tickets!</div>
-          <img src={LotteryTicket.src} alt="lottery-ticket" width="250" />
-        </div>
-        <div className="block__item">
-          <a
-            href={`https://testnet.aspect.co/collection/${Contracts['SN_GOERLI'].lottery_token}`}
-            target="_blank"
-            rel="noreferrer">
-            <BaseButton>
-              <SwapIcon className={'mr-3'} />
-              Trade NFT tickets
-            </BaseButton>
-          </a>
-        </div>
-      </div>
-    </Flex>
-
-    // </Layout>
+    </div>
   )
 }
 
