@@ -24,6 +24,7 @@ export interface Project {
   logo?: string
   cover?: string
   totalRaise?: number
+  tokenAddress: string
   tokenPrice: number
   maxAllocation?: number
   currentRoundIndex: number
