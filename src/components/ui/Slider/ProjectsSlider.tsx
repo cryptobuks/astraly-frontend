@@ -117,7 +117,7 @@ const ProjectsSlider: React.FC<{ projects?: Project[] }> = ({ projects }) => {
       return
     }
 
-    if (current < 0) {
+    if (current <= 0) {
       setCurrent(0)
       return
     }
