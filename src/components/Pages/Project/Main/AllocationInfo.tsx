@@ -45,12 +45,30 @@ const AllocationBuyInfo = () => {
   )
 }
 
-const AllocationInfo: React.FC<{ type?: 'claim' | 'burn' | 'buy' }> = ({ type = 'claim' }) => {
+const AllocationQuestInfo = () => {
+  return (
+    <div className="block--contrast">
+      <div className="title--medium mb-6">Earn lottery tickets</div>
+
+      <p className="text-primaryClear leading-138">
+        We are excited to launch our IDO on Astraly. For a chance to win an allocation, please fill
+        out the form below and perform all tasks accordingly.
+      </p>
+
+      <p className="text-primaryClear mt-6 uppercase">Good Luck! 🚀</p>
+    </div>
+  )
+}
+
+const AllocationInfo: React.FC<{
+  type?: 'claim' | 'burn' | 'buy' | 'quest'
+}> = ({ type = 'claim' }) => {
   return (
     <div className="AllocationInfo block">
       {type === 'claim' && <AllocationClaimInfo />}
       {type === 'burn' && <AllocationBurnInfo />}
       {type === 'buy' && <AllocationBuyInfo />}
+      {type === 'quest' && <AllocationQuestInfo />}
 
       <div className="block__item">
         <div className="title--small mb-4">Conditions of entry</div>
