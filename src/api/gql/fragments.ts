@@ -39,6 +39,10 @@ export const UserFragment = gql`
     questCompleted {
       _id
     }
+    socialLinks {
+      type
+      id
+    }
   }
 `
 
