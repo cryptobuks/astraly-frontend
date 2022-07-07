@@ -16,7 +16,7 @@ import { ToastState } from 'components/ui/Toast/utils'
 const ClaimPannel = ({ hideHarvest }: { hideHarvest?: boolean }) => {
   const { account } = useStarknetReact()
   const { harvestRewards, getPendingRewards } = useStakingContract()
-  const steps = ['Buy astr tokens', 'Stake ASTR tokens', 'Claim lottery tickets', 'Invest in IDOs']
+  const steps = ['Buy ASTR tokens', 'Stake ASTR tokens', 'Claim lottery tickets', 'Invest in IDOs']
   const dispatch = useAppDispatch()
 
   const [harvesting, setHarvesting] = useState(false)
@@ -125,7 +125,10 @@ const ClaimPannel = ({ hideHarvest }: { hideHarvest?: boolean }) => {
             </div>
           </div>
           <div className="block__item">
-            <BaseButton onClick={handleHarvest} disabled={harvesting} small>
+            <BaseButton
+              onClick={handleHarvest}
+              disabled={harvesting || Number(pendingRewards) === 0}
+              small>
               <SendIcon className={'mr-2'} />
               Claim {Number(pendingRewards).toFixed(3)} ASTR
             </BaseButton>

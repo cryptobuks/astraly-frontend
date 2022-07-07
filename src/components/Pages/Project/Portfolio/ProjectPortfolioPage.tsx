@@ -105,7 +105,7 @@ const ProjectPortfolioPage = () => {
         _percents.push(Number(uint256ToBN(_percent.res)) + _prevPercent)
         _unlockTimes.push(new Date(Number(_unlockTime.res) * 1000))
       }
-      console.log(_percents, _unlockTimes)
+      // console.log(_percents, _unlockTimes)
       setVestingPercents(_percents)
       setUnlockTimes(_unlockTimes)
 
@@ -136,10 +136,12 @@ const ProjectPortfolioPage = () => {
   const handleWithdraw = async () => {
     try {
       setWithdrawing(true)
-      const tx = await withdrawTokens(
-        project?.idoId.toString(),
-        Array.from({ length: currentPortion }, (v, i) => i + 1)
+      const _portionIds = Array.from(
+        { length: currentPortion - Number(userInfo.participation.last_portion_withdrawn) },
+        (v: number, i) => i + Number(userInfo.participation.last_portion_withdrawn) + 1
       )
+      console.log(_portionIds)
+      const tx = await withdrawTokens(project?.idoId.toString(), _portionIds)
       addTransaction(
         tx,
         'Withdraw Tokens',
@@ -177,11 +179,11 @@ const ProjectPortfolioPage = () => {
 
     const _interval = setInterval(() => {
       const _remainingTime = unlockTimes[currentPortion].getTime() - new Date().getTime()
-      // const days = Math.floor(_remainingTime / (1000 * 60 * 60 * 24))
+      const days = Math.floor(_remainingTime / (1000 * 60 * 60 * 24))
       const hours = Math.floor((_remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
       const minutes = Math.floor((_remainingTime % (1000 * 60 * 60)) / (1000 * 60))
       const seconds = Math.floor((_remainingTime % (1000 * 60)) / 1000)
-      setRoundTimer(`${hours}h${minutes}m${seconds}s`)
+      setRoundTimer(`${days}d${hours}h${minutes}m${seconds}s`)
     }, 1000)
 
     return () => clearInterval(_interval)
@@ -277,7 +279,11 @@ const ProjectPortfolioPage = () => {
               disabled={
                 withdrawing ||
                 currentPortion === 0 ||
-                (userInfo ? !userInfo.has_participated : true)
+                (userInfo
+                  ? !userInfo.has_participated ||
+                    Number(uint256ToBN(userInfo.participation.amount_bought)) === 0 ||
+                    Number(userInfo.participation.last_portion_withdrawn) === currentPortion
+                  : true)
               }>
               <SendIcon className={'mr-2'} />
               {withdrawing ? <Spinner /> : 'Withdraw'}

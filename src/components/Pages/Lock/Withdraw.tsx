@@ -30,16 +30,17 @@ const Withdraw = ({
 }) => {
   const { account } = useStarknetReact()
   const [withdrawing, setWithdrawing] = useState(false)
-  const { redeem } = useStakingContract()
+  const [withdrawingLP, setWithdrawingLP] = useState(false)
+  const { withdraw, withdrawLP, redeem } = useStakingContract()
   const { addTransaction } = useTransactions()
   const dispatch = useAppDispatch()
 
   const handleWithdraw = async () => {
-    if (!account?.address) return
+    if (!account?.address || !zkpStaked) return
 
     try {
       setWithdrawing(true)
-      const tx = await redeem(xzkpBalance, account)
+      const tx = await redeem(zkpStaked, account)
       addTransaction(tx, 'Withdraw Tokens', onSuccess, () => {})
 
       setWithdrawing(false)
@@ -57,15 +58,42 @@ const Withdraw = ({
     }
   }
 
+  const handleWithdrawLP = async () => {
+    if (!account?.address || !lpStaked) return
+
+    try {
+      setWithdrawingLP(true)
+      const tx = await withdrawLP(lpStaked, account, Contracts['SN_GOERLI'].lp_token)
+      addTransaction(tx, 'Withdraw LP Tokens', onSuccess, () => {})
+
+      setWithdrawingLP(false)
+    } catch (e) {
+      dispatch(
+        ToastActions.addToast({
+          title: String(e),
+          action: <div className="font-heading text-12 text-primary">Try again</div>,
+          state: ToastState.ERROR,
+          autoClose: true,
+        })
+      )
+      console.error(e)
+      setWithdrawingLP(false)
+    }
+  }
+
   return (
     <div className="Withdraw block">
       <div className="block--contrast">
         <div className="title--medium mb-6">Withdraw Liquid Pool</div>
         <div className="flex items-center justify-between text-16 mb-2">
           <div className="text-primaryClear">ASTR Staked</div>
-          <div className="font-heading text-primary">{zkpStaked ? zkpStaked : <Spinner />}</div>
+          <div className="font-heading text-primary">
+            {Number(zkpStaked).toFixed(3) ? zkpStaked : <Spinner />}
+          </div>
           <div className="text-primaryClear">ASTR-LP Staked</div>
-          <div className="font-heading text-primary">{lpStaked ? lpStaked : <Spinner />}</div>
+          <div className="font-heading text-primary">
+            {Number(lpStaked).toFixed(3) ? lpStaked : <Spinner />}
+          </div>
         </div>
         <div className="flex items-center justify-between text-16">
           <div className="text-primaryClear">Time left to unlock</div>
@@ -84,10 +112,19 @@ const Withdraw = ({
       </div>
 
       <div className="block__item">
-        <BaseButton onClick={handleWithdraw} disabled={withdrawing || unlockRemainingTime > 0}>
+        <BaseButton
+          onClick={handleWithdraw}
+          disabled={withdrawing || unlockRemainingTime > 0 || Number(zkpStaked) === 0}>
           <SendIcon className={'mr-2'} />
           {withdrawing ? <Spinner /> : 'Withdraw'}
         </BaseButton>
+        {/* <BaseButton
+          onClick={handleWithdrawLP}
+          disabled={withdrawingLP || unlockRemainingTime > 0 || Number(lpStaked) === 0}
+          className="mt-5">
+          <SendIcon className={'mr-2'} />
+          {withdrawingLP ? <Spinner /> : 'Withdraw LP'}
+        </BaseButton> */}
       </div>
     </div>
   )
