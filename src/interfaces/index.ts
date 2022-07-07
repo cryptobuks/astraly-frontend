@@ -8,7 +8,12 @@ export interface Round {
   endDate: Date
 }
 
-type ProjectType = 'IDO' | 'LBP' | 'GDA'
+export enum ProjectType {
+  IDO = 'IDO',
+  INO = 'INO',
+  LBP = 'LBP',
+  GDA = 'GDA',
+}
 
 export interface Project {
   _id: number
@@ -22,7 +27,7 @@ export interface Project {
   tokenPrice: number
   maxAllocation?: number
   currentRoundIndex: number
-  type?: ProjectType
+  type: ProjectType
   categories?: string[]
   rounds: Round[]
   quests?: Quest[]
