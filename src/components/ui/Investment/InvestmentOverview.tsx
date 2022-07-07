@@ -10,16 +10,21 @@ import Exclamation from 'assets/icons/Exclamation.svg'
 // import { uint256 } from 'starknet'
 import { Contracts } from 'constants/networks'
 import { useWallet } from 'context/WalletProvider'
+import { useSelector } from 'react-redux'
+import { RootState } from 'stores/reduxStore'
+import { getVoyagerLink } from 'utils'
 
 const InvestmentOverview: React.FC = () => {
   const [stats, setStats] = useState([['']])
   const { deposits } = useWallet()
 
+  const { user } = useSelector((state: RootState) => state.Auth)
+
   const fetchInformation = async () => {
     try {
       const stats = [
-        ['$ASTR Staked', deposits[Contracts['SN_GOERLI'].token].normalized],
-        ['ASTR-LP Staked', deposits[Contracts['SN_GOERLI'].lp_token].normalized],
+        ['$ASTR Staked', Number(deposits[Contracts['SN_GOERLI'].token].normalized).toFixed(2)],
+        ['ASTR-LP Staked', Number(deposits[Contracts['SN_GOERLI'].lp_token].normalized).toFixed(2)],
         ['Total $USD invested', '0.0'],
         ['IDO participations', '0'],
       ]
@@ -72,17 +77,21 @@ const InvestmentOverview: React.FC = () => {
           <div className="text-right">Transaction</div>
         </div>
 
-        {transactions &&
-          transactions.map((transaction) => (
+        {user.transactions &&
+          user.transactions.map((transaction: any) => (
             <div
               className="grid grid-cols-3 font-heading text-primaryClear bg-primaryClearBg rounded-3xl  px-4 md:px-8 py-6 text-[10px] md:text-12 mb-2"
-              key={transaction.transactionId}>
-              <div>{transaction?.action}</div>
-              <div>{format(transaction.date, 'dd MMMM yyyy')}</div>
+              key={transaction?._id}>
+              <div>{transaction?.name}</div>
+              <div>{format(new Date(transaction?.timestamp), 'dd MMMM yyyy')}</div>
               <div className="text-right text-primary">
-                <Link href={'/'}>
-                  <a className="cursor-pointer">View on Voyager</a>
-                </Link>
+                <a
+                  className="cursor-pointer"
+                  href={getVoyagerLink(transaction?.hash)}
+                  target="_blank"
+                  rel="noreferrer">
+                  View on Voyager
+                </a>
               </div>
             </div>
           ))}
