@@ -196,98 +196,104 @@ const ProjectPortfolioPage = () => {
   return (
     <>
       <ProjectLayout project={project}>
-        <div className="block">
-          <div className="block--contrast">
-            {/* <div className="title--medium mb-6">Distribution Info</div> */}
-            <div>
-              {loading || graphData.length === 0 ? (
-                <Spinner color="#8F00FF" />
-              ) : (
-                <AreaChart
-                  width={730}
-                  height={250}
-                  data={graphData}
-                  margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
-                  <defs>
-                    <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8F00FF" stopOpacity={0.8} />
-                      <stop offset="95%" stopColor="#8F00FF" stopOpacity={0} />
-                    </linearGradient>
-                  </defs>
-                  <XAxis dataKey="date" tickFormatter={dateFormatter} />
-                  <YAxis tickFormatter={toPercent} />
-                  {/* <CartesianGrid strokeDasharray="3 3" /> */}
-                  <Tooltip content={<CustomTooltip />} />
-                  <Area
-                    type="monotone"
-                    dataKey="vestingPercent"
-                    stroke="#8F00FF"
-                    fillOpacity={1}
-                    fill="url(#colorUv)"
-                  />
-                </AreaChart>
-              )}
-            </div>
-            <div className="title--medium mb-6 mt-6">Information</div>
-            <div className="flex items-center justify-between text-16 mb-0.5">
-              <div className="text-primaryClear">Currently released</div>
-              <div className="font-heading text-primary">
-                {currentPortion > 0 ? toPercent(vestingPercents[currentPortion - 1]) : '0%'}
-              </div>
-            </div>
-            <div className="flex items-center justify-between text-16 mb-0.5">
-              <div className="text-primaryClear">Last withdrawn</div>
-              <div className="font-heading text-primary">
-                {userInfo?.participation?.last_portion_withdrawn > 0
-                  ? toPercent(vestingPercents[userInfo.participation.last_portion_withdrawn - 1])
-                  : '0%'}
-              </div>
-            </div>
-            <div className="flex items-center justify-between text-16 mb-0.5">
-              <div className="text-primaryClear">Amount paid</div>
-              <div className="font-heading text-primary">
-                {userInfo?.participation ? (
-                  `${formatUnits(
-                    uint256ToBN(userInfo.participation.amount_paid).toString(),
-                    'ether'
-                  )} ETH`
+        <div className="grid grid-cols-1 gap-4 mb-4">
+          <div className="block">
+            <div className="block--contrast">
+              {/* <div className="title--medium mb-6">Distribution Info</div> */}
+              <div>
+                {loading || graphData.length === 0 ? (
+                  <Spinner color="#8F00FF" />
                 ) : (
-                  <Spinner />
+                  <AreaChart
+                    width={730}
+                    height={250}
+                    data={graphData}
+                    margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+                    <defs>
+                      <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#8F00FF" stopOpacity={0.8} />
+                        <stop offset="95%" stopColor="#8F00FF" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <XAxis dataKey="date" tickFormatter={dateFormatter} />
+                    <YAxis tickFormatter={toPercent} />
+                    {/* <CartesianGrid strokeDasharray="3 3" /> */}
+                    <Tooltip content={<CustomTooltip />} />
+                    <Area
+                      type="monotone"
+                      dataKey="vestingPercent"
+                      stroke="#8F00FF"
+                      fillOpacity={1}
+                      fill="url(#colorUv)"
+                    />
+                  </AreaChart>
                 )}
               </div>
-            </div>
-            <div className="flex items-center justify-between text-16 mb-0.5">
-              <div className="text-primaryClear">Tokens bought</div>
-              <div className="font-heading text-primary">
-                {userInfo?.participation ? (
-                  `${uint256ToBN(userInfo.participation.amount_bought).toString()} $${
-                    project.ticker
-                  }`
-                ) : (
-                  <Spinner />
-                )}
-              </div>
-            </div>
-            <div className="flex items-center justify-between text-16 mb-0.5">
-              <div className="text-primaryClear">Time until next release</div>
-              <div className="font-heading text-primary">{roundTimer}</div>
             </div>
           </div>
-          <div className="block__item">
-            <BaseButton
-              onClick={handleWithdraw}
-              disabled={
-                withdrawing ||
-                currentPortion === 0 ||
-                (userInfo
-                  ? !userInfo.has_participated ||
-                    Number(uint256ToBN(userInfo.participation.amount_bought)) === 0 ||
-                    Number(userInfo.participation.last_portion_withdrawn) === currentPortion
-                  : true)
-              }>
-              <SendIcon className={'mr-2'} />
-              {withdrawing ? <Spinner /> : 'Withdraw'}
-            </BaseButton>
+          <div className="block">
+            <div className="block--contrast">
+              <div className="title--medium mb-6 mt-6">Information</div>
+              <div className="flex items-center justify-between text-16 mb-0.5">
+                <div className="text-primaryClear">Currently released</div>
+                <div className="font-heading text-primary">
+                  {currentPortion > 0 ? toPercent(vestingPercents[currentPortion - 1]) : '0%'}
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-16 mb-0.5">
+                <div className="text-primaryClear">Last withdrawn</div>
+                <div className="font-heading text-primary">
+                  {userInfo?.participation?.last_portion_withdrawn > 0
+                    ? toPercent(vestingPercents[userInfo.participation.last_portion_withdrawn - 1])
+                    : '0%'}
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-16 mb-0.5">
+                <div className="text-primaryClear">Amount paid</div>
+                <div className="font-heading text-primary">
+                  {userInfo?.participation ? (
+                    `${formatUnits(
+                      uint256ToBN(userInfo.participation.amount_paid).toString(),
+                      'ether'
+                    )} ETH`
+                  ) : (
+                    <Spinner />
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-16 mb-0.5">
+                <div className="text-primaryClear">Tokens bought</div>
+                <div className="font-heading text-primary">
+                  {userInfo?.participation ? (
+                    `${uint256ToBN(userInfo.participation.amount_bought).toString()} $${
+                      project.ticker
+                    }`
+                  ) : (
+                    <Spinner />
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center justify-between text-16 mb-0.5">
+                <div className="text-primaryClear">Time until next release</div>
+                <div className="font-heading text-primary">{roundTimer}</div>
+              </div>
+            </div>
+            <div className="block__item">
+              <BaseButton
+                onClick={handleWithdraw}
+                disabled={
+                  withdrawing ||
+                  currentPortion === 0 ||
+                  (userInfo
+                    ? !userInfo.has_participated ||
+                      Number(uint256ToBN(userInfo.participation.amount_bought)) === 0 ||
+                      Number(userInfo.participation.last_portion_withdrawn) === currentPortion
+                    : true)
+                }>
+                <SendIcon className={'mr-2'} />
+                {withdrawing ? <Spinner /> : 'Withdraw'}
+              </BaseButton>
+            </div>
           </div>
         </div>
       </ProjectLayout>
