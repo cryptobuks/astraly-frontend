@@ -11,3 +11,18 @@
     width: 4px;
   }
 }
+
+.horizontal {
+  @apply text-primaryClear;
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  align-items: center;
+  justify-content: center;
+  &Line {
+    @apply bg-primaryClearBg;
+    height: 4px;
+    border-radius: 3px;
+    width: 200px;
+  }
+}

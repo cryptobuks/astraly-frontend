@@ -1,8 +1,10 @@
+import React from 'react'
+
 import Star from 'assets/images/star--current.svg?inline'
 
 import styles from './Separator.module.scss'
 
-const Vertical = () => {
+const Vertical: React.FC = () => {
   return (
     <div className={styles.vertical}>
       <div className={styles.verticalLine} />

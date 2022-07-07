@@ -1,24 +1,27 @@
+import Reaact, { useCallback, useEffect, useMemo, useState } from 'react'
+
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+
 import { Project } from '../../../../interfaces'
 import ProjectLayout from '../ProjectLayout'
-import InvestmentOverview from '../../../ui/Investment/InvestmentOverview'
 import { useQuery } from '@apollo/client'
 import { PROJECT } from '../../../../api/gql/querries'
 import { useIDOContract } from 'contracts'
-import BaseButton from 'components/ui/buttons/BaseButton'
-import { SendIcon } from 'components/ui/Icons/Icons'
 import { useTransactions } from 'context/TransactionsProvider'
 import { useAppDispatch } from 'hooks/hooks'
 import ToastActions from 'actions/toast.actions'
 import { ToastState } from 'components/ui/Toast/utils'
 import { Spinner } from '@chakra-ui/react'
 import { uint256ToBN } from 'starknet/utils/uint256'
-import { Area, AreaChart, ComposedChart, Legend, Line, Tooltip, XAxis, YAxis } from 'recharts'
-import { add, differenceInCalendarDays, format } from 'date-fns'
+import { Area, AreaChart, Tooltip, XAxis, YAxis } from 'recharts'
+import { format } from 'date-fns'
 import { useStarknetReact } from '@web3-starknet-react/core'
 import { Result } from 'starknet'
 import { formatUnits } from 'ethers/lib/utils'
+
+import BaseButton from 'components/ui/buttons/BaseButton'
+import { SendIcon } from 'components/ui/Icons/Icons'
+import Horizontal from 'components/ui/Separator/Horizontal'
 
 const dateFormatter = (date: number) => {
   return format(new Date(date), 'dd/MMM')
@@ -231,6 +234,9 @@ const ProjectPortfolioPage = () => {
               </div>
             </div>
           </div>
+
+          <Horizontal />
+
           <div className="block">
             <div className="block--contrast">
               <div className="title--medium mb-6 mt-6">Information</div>
