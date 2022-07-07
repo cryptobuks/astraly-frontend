@@ -47,8 +47,8 @@ const HomeHeading = () => {
               StarkNet projects.
             </h1>
             <p className={'medium-text max-w-558px mb-12'}>
-              <strong>Buy</strong> ZKP tokens, <strong>stake</strong> them and{' '}
-              <strong>receive</strong> lottery tickets to invest in the listed projects.
+              <strong>Buy</strong> ASTR tokens, <strong>stake</strong> them and receive lottery
+              tickets to <strong>invest</strong> in the listed projects.
             </p>
             <div className="md:flex buttons">
               <Link href={'/buy'}>

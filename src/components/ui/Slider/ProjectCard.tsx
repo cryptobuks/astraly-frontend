@@ -93,7 +93,7 @@ const ProjectCard: React.FC<{ project: Project; index: number }> = ({ project, i
             <div className="ticker font-bold text-primary text-12 pb-1">${project.ticker}</div>
           </div>
           <Item label="Total raise">ETH {project.totalRaise}</Item>
-          <Item label="Max allocation">ETH {project.maxAllocation}</Item>
+          <Item label="Token price">ETH {project.tokenPrice}</Item>
           <Item label="Round closes in">{roundTimer}</Item>
         </div>
       </div>

@@ -98,6 +98,7 @@ const ProjectClaimPage = () => {
         <div className="block mb-4">
           <div className="block--contrast">
             <div className="title--medium mb-1">Total Claimable Tickets</div>
+            <div className="title--small mb-5">YOU CAN ONLY CLAIM TICKETS ONCE PER IDO!</div>
             <div className="flex items-center">
               {/* TODO: CHANGE THIS TO CHECK WITH API */}
               {loading ? (
@@ -126,7 +127,7 @@ const ProjectClaimPage = () => {
                 onClick={handleClaimTickets}
                 disabled={claiming || Number(ticketsBalance) > 0}>
                 <SendIcon className={'mr-2'} />
-                {claiming ? <Spinner /> : 'Claim Tokens'}
+                {claiming ? <Spinner /> : 'Claim Tickets'}
               </BaseButton>
               <Link href="/stake">
                 <BaseButton className="xl:col-span-1 whitespace-nowrap px-5">
