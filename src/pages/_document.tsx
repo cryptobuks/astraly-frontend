@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { ColorModeScript } from '@chakra-ui/color-mode'
 import createEmotionServer from '@emotion/server/create-instance'
 import type { DocumentContext } from 'next/document'
 import Document, { Html, Head, Main, NextScript } from 'next/document'
@@ -81,7 +80,6 @@ class MyDocument extends Document {
           <meta name="twitter:card" content="summary_large_image" />
         </Head>
         <body>
-          <ColorModeScript initialColorMode="light" />
           <Main />
           <NextScript />
         </body>
