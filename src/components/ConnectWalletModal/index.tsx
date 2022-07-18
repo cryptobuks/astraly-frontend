@@ -1,4 +1,3 @@
-import { Flex, usePrevious } from '@chakra-ui/react'
 import { UnsupportedChainIdError, useStarknetReact } from '@web3-starknet-react/core'
 import cx from 'classnames'
 import React, { useEffect } from 'react'
@@ -23,6 +22,9 @@ const Option = ({ onClick = null, header, icon, active = false }: any) => {
 const ConnectWalletModal = ({ visible, onClose }: any) => {
   const { activate, active, connector, error, deactivate } = useStarknetReact()
 
+  const usePrevious = (a: any) => {
+    return a
+  }
   // close modal when a connection is successful
   const activePrevious = usePrevious(active)
   const connectorPrevious = usePrevious(connector)
@@ -33,7 +35,6 @@ const ConnectWalletModal = ({ visible, onClose }: any) => {
     ) {
       onClose()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active, error, connector, visible, activePrevious, connectorPrevious])
 
   const tryActivation = async (connector: any) => {
@@ -79,11 +80,11 @@ const ConnectWalletModal = ({ visible, onClose }: any) => {
       return (
         <div>
           <div className={styles.text}>Please connect to {isMainnet ? 'Ethereum' : 'Goerli'}.</div>
-          <Flex border="2px solid #000" width="100%" marginBottom="20px">
+          <div>
             <div className={styles.switchBtn} onClick={deactivate}>
               Disconnect
             </div>
-          </Flex>
+          </div>
         </div>
       )
     }

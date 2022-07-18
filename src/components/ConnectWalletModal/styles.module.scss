@@ -11,7 +11,7 @@
   transition: transform ease 300ms;
   background-color: #fff;
   margin-bottom: 15px;
-  color: #8F00FF;
+  color: #8f00ff;
   grid-gap: 10px;
 
   &:last-child {
@@ -20,7 +20,7 @@
 
   &:hover {
     border: 2px solid #fff;
-    background-color: #8F00FF;
+    background-color: #8f00ff;
   }
 
   &.active {
@@ -28,7 +28,7 @@
   }
 }
 
-.option:hover .header{
+.option:hover .header {
   color: #fff;
 }
 
