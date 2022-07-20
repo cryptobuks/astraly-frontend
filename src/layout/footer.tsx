@@ -15,12 +15,14 @@ import DocumentIcon from 'assets/icons/Document.svg'
 import FolderIcon from 'assets/icons/Folder.svg'
 import Logo from 'assets/images/logo-text.svg'
 import Link from 'next/link'
+import Toggle from '../components/ui/inputs/Toggle'
+import { useEffect, useState } from 'react'
 
 const Item = ({ icon, label, href }: { icon: string; label: string; href: string }) => {
   return (
     <>
       <a href={href} target="__blank">
-        <div className="flex items-center text-primary cursor-pointer">
+        <div className="flex items-center t-primary cursor-pointer">
           <div className="icon mr-2 transform -translate-y-0.5">
             <img src={icon} alt={label} />
           </div>
@@ -41,6 +43,39 @@ const Footer = () => {
     [TelegramIcon, 'Telegram', TelegramLink],
     [FolderIcon, 'Docs', DocsLink],
   ]
+  const [isDark, setIsDark] = useState(false)
+
+  const checkTheme = () => {
+    const item = localStorage.getItem('theme')
+
+    if (item) {
+      setIsDark(item === 'dark')
+    }
+
+    if (
+      localStorage.theme === 'dark' ||
+      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }
+
+  useEffect(() => {
+    checkTheme()
+
+    window.addEventListener('storage', checkTheme)
+
+    return () => {
+      window.removeEventListener('storage', checkTheme)
+    }
+  }, [])
+
+  const toggleTheme = () => {
+    localStorage.setItem('theme', localStorage.getItem('theme') === 'dark' ? 'light' : 'dark')
+    checkTheme()
+  }
   return (
     <>
       <div className="g-container py-4">
@@ -51,14 +86,17 @@ const Footer = () => {
             ))}
           </div>
 
-          <div className="flex items-center">
-            <p className={'mr-8'}>
+          <div className="flex flex-col md:flex-row items-center gap-8">
+            <div>
+              <Toggle value={isDark} onClick={toggleTheme} />
+            </div>
+
+            <p>
               Get in touch:{' '}
               <a href={`mailto:${ContactEmail}`} className={'text-primary'}>
                 {ContactEmail}{' '}
               </a>
             </p>
-
             <Link href={'/'}>
               <img src={Logo} alt={'Astraly'} />
             </Link>

@@ -69,7 +69,7 @@ body {
 }
 
 .main-background {
-  background: #faf3ff;
+  @apply bg-primaryClearBg dark:bg-primaryClearBgDark;
   position: fixed;
   z-index: -100;
   top: 0;
@@ -78,6 +78,7 @@ body {
   height: 100%;
   overflow: hidden;
   &.absolute {
+    @apply dark:hidden;
     position: absolute;
     width: 100%;
     height: 100vh;
@@ -85,6 +86,7 @@ body {
     background: linear-gradient(180deg, #ffffff 0%, #faf3ff 100%);
   }
   &::after {
+    @apply dark:hidden;
     content: '';
     position: absolute;
     width: 1920px;
@@ -125,6 +127,7 @@ body {
   }
 
   &::before {
+    @apply dark:hidden;
     content: '';
     position: absolute;
     width: 1920px;
@@ -227,3 +230,4 @@ body {
 
 @import 'animations';
 @import 'ui';
+@import 'ui-utils';

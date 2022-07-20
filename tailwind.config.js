@@ -1,6 +1,7 @@
 const defaultTheme = require('tailwindcss/defaultTheme')
 
 module.exports = {
+  darkMode: 'class',
   purge: ['./src/pages/**/*.tsx', './src/components/**/*.tsx', './src/layout/**/*.tsx'],
   theme: {
     extend: {
@@ -33,6 +34,7 @@ module.exports = {
         whitePurple: '#C89CFF',
         gray: '#898989',
         bgPurple: 'rgba(143, 0, 255, 0.05)',
+        primaryClearBgDark: '#161616',
       },
       maxWidth: {
         '558px': '558px',
