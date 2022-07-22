@@ -19,7 +19,7 @@ import { useQuery } from '@apollo/client'
 import { PROJECT } from '../../../../api/gql/querries'
 import { useWallet } from 'context/WalletProvider'
 import { Contracts } from 'constants/networks'
-import Spinner from 'components/ui/Spinner'
+import Spinner from 'components/ui/Spinner/Spinner'
 
 const ProjectBuyPage = () => {
   const router = useRouter()

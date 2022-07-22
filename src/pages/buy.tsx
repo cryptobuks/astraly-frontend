@@ -90,12 +90,11 @@ const BuyPageContainer = () => {
   }, [unlockTime])
 
   return (
-    // <Layout>
-    <div>
+    <div className={'g-container gap-5 justify-center flex flex-col md:flex-row'}>
       <div className="flex flex-col gap-10">
         <div className="block h-fit">
           <div className="block--contrast">
-            <h3>Mint Amount: {mintAmount} ASTR</h3>
+            <h3 className={'small-title'}>Mint Amount: {mintAmount} ASTR</h3>
 
             <BaseButton
               onClick={handleTransfer}
@@ -151,8 +150,6 @@ const BuyPageContainer = () => {
         </div>
       </div>
     </div>
-
-    // </Layout>
   )
 }
 

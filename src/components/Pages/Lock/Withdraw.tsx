@@ -9,7 +9,7 @@ import { useTransactions } from 'context/TransactionsProvider'
 import { useAppDispatch } from 'hooks/hooks'
 import ToastActions from 'actions/toast.actions'
 import { ToastState } from 'components/ui/Toast/utils'
-import Spinner from '../../ui/Spinner'
+import Spinner from '../../ui/Spinner/Spinner'
 
 const Withdraw = ({
   xzkpBalance,

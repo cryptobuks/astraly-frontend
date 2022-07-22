@@ -18,7 +18,7 @@ import { useStarknetReact } from '@web3-starknet-react/core'
 import { Result } from 'starknet'
 import { formatUnits } from 'ethers/lib/utils'
 import axios from 'axios'
-import Spinner from '../../../ui/Spinner'
+import Spinner from '../../../ui/Spinner/Spinner'
 
 const dateFormatter = (date: number) => {
   return format(new Date(date), 'dd/MMM')

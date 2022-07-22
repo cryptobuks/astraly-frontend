@@ -13,7 +13,7 @@ import Link from 'next/link'
 import { useTransactions } from 'context/TransactionsProvider'
 import { useQuery } from '@apollo/client'
 import { PROJECT } from '../../../../api/gql/querries'
-import Spinner from '../../../ui/Spinner'
+import Spinner from '../../../ui/Spinner/Spinner'
 
 const ProjectClaimPage = () => {
   const router = useRouter()

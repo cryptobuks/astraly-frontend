@@ -18,7 +18,7 @@ import { useTransactions } from 'context/TransactionsProvider'
 import { ToastState } from 'components/ui/Toast/utils'
 import { useQuery } from '@apollo/client'
 import { PROJECT } from '../../../../api/gql/querries'
-import Spinner from '../../../ui/Spinner'
+import Spinner from '../../../ui/Spinner/Spinner'
 
 const BurnPage = () => {
   const router = useRouter()
