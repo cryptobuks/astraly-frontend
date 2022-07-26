@@ -8,6 +8,10 @@ import { useQuery } from '@apollo/client'
 import { SEARCH_PROJECTS } from '../../api/gql/querries'
 import SearchInput from '../../components/ui/inputs/SearchInput'
 import Filter from '../../components/ui/inputs/Filter'
+import RoadmapBlock from '../../components/Blocks/Roadmap/RoadmapBlock'
+import NetworkStatsBlock from '../../components/Blocks/NetworkStats/NetworkStatsBlock'
+import FaqBlock from '../../components/Blocks/Faq/FaqBlock'
+import TeamBlock from '../../components/Blocks/Team/TeamBlock'
 
 const Home = () => {
   const [search, setSearch] = useState('')
@@ -33,6 +37,12 @@ const Home = () => {
       </Container>
 
       {data && data.searchProjects.length > 0 && <ProjectsSlider projects={data.searchProjects} />}
+
+      <div className="h-16"></div>
+      <RoadmapBlock />
+      <NetworkStatsBlock />
+      <FaqBlock />
+      <TeamBlock />
     </div>
   )
 }

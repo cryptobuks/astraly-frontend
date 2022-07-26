@@ -1,0 +1,21 @@
+.t-primaryClear {
+  @apply text-primaryClear dark:text-white;
+}
+
+.t-primary {
+  @apply text-primary dark:text-white;
+}
+
+.t-dark {
+  @apply text-primaryDark;
+}
+
+.t-block-title {
+  @apply font-heading text-40 mb-20;
+}
+
+.ui-page-block {
+  @apply py-16 -mt-16 border-t border-l border-r border-white;
+  background: linear-gradient(-180deg, #faf3ff 0, rgba(143, 0, 255, 0.05) 50%, rgba(143, 0, 255, 0.05) 100%);
+  border-radius: 64px 64px 0 0;
+}
