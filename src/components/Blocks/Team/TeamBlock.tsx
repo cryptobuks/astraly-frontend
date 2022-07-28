@@ -79,14 +79,14 @@ const TeamBlock = () => {
             </div>
           </div>
 
-          <h3 className="h3 ui-t-dark font-heading text-24 mb-1">Advisors</h3>
+          {/* <h3 className="h3 ui-t-dark font-heading text-24 mb-1">Advisors</h3>
           <p className="font-bold mb-14">With expert advisors around.</p>
 
           <div className="grid lg:grid-cols-2 gap-16">
             {advisors.map((x, i) => (
               <TeamMember {...x} key={i} />
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
