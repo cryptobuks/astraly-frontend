@@ -4,6 +4,10 @@
     &:global(.text-white) {
       color: white;
     }
+
+    &:global(.ui-t-primary) {
+      color: #8F00FF;
+    }
   }
   ul {
     @apply list-disc ml-5 font-bold;

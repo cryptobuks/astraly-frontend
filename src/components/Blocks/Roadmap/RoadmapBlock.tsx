@@ -27,11 +27,11 @@ const RoadmapBlock = () => {
               </div>
 
               <div className="block p-8 2xl:min-w-[300px] font-bold">
-                <h4 className="title ui-small-title mb-4 ">
+                <h4 className="title ui-small-title mb-4 ui-t-primary">
                   <div className="icon mr-1">
-                    <SandWatch />
+                    <BoltIcon />
                   </div>
-                  Not started
+                  Ongoing
                 </h4>
 
                 <ul className="mt-auto list-disc ml-3">
