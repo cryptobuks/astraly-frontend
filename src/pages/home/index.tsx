@@ -12,6 +12,7 @@ import RoadmapBlock from '../../components/Blocks/Roadmap/RoadmapBlock'
 import NetworkStatsBlock from '../../components/Blocks/NetworkStats/NetworkStatsBlock'
 import FaqBlock from '../../components/Blocks/Faq/FaqBlock'
 import TeamBlock from '../../components/Blocks/Team/TeamBlock'
+import FloatingMenu from '../../components/ui/FloatingMenu/FloatingMenu'
 
 const Home = () => {
   const [search, setSearch] = useState('')
@@ -27,6 +28,8 @@ const Home = () => {
       <div className="my-20 w-full overflow-hidden">
         <StatsBar />
       </div>
+
+      <FloatingMenu />
 
       <Container>
         <div className="flex items-center mb-9 gap-4">

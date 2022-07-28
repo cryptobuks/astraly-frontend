@@ -2,7 +2,7 @@ import FaqItem from './FaqItem'
 
 const FaqBlock = () => {
   return (
-    <div className="ui-page-block">
+    <div className="ui-page-block" id="faq">
       <div className="g-container">
         <h2 className="t-block-title t-dark">FAQ</h2>
         <div className="ml-10">

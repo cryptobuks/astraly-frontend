@@ -4,7 +4,7 @@ import SandWatch from 'assets/icons/currentColor/Sand-watch.svg?inline'
 
 const RoadmapBlock = () => {
   return (
-    <div className="ui-page-block">
+    <div className="ui-page-block" id="roadmap">
       <div className="g-container">
         <h2 className="t-block-title t-dark">Roadmap</h2>
 

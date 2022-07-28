@@ -50,7 +50,7 @@ const advisors = [
 ]
 const TeamBlock = () => {
   return (
-    <div className="ui-page-block">
+    <div className="ui-page-block" id="team">
       <div className="g-container">
         <h2 className="t-block-title t-dark">Team</h2>
         <div className="ml-10">
