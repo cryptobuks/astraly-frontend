@@ -5,7 +5,7 @@ const TeamMember: React.FC<{
   image: string
 }> = ({ title, name, twitter, image }) => {
   return (
-    <div className="TeamMember block py-4 pl-[100px] w-[420px] relative ml-[100px]">
+    <div className="TeamMember block py-4 pl-[100px] lg:w-[420px] relative md:ml-[100px]">
       <div className="image absolute left-[-100px] top-1/2 transform -translate-y-1/2">
         <img src={image} alt={''} className="w-[200px]" />
       </div>

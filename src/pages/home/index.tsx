@@ -32,7 +32,7 @@ const Home = () => {
       <FloatingMenu />
 
       <Container>
-        <div className="flex items-center mb-9 gap-4">
+        <div className="flex flex-col md:flex-row md:items-center mb-9 gap-4">
           <h2 className="text-primaryDark uppercase font-heading text-24 mr-6">ONGOING PROJECTS</h2>
           <Filter />
           <SearchInput value={search} onChange={(e) => setSearch(e.target.value)} />
