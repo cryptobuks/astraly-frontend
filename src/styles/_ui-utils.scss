@@ -22,6 +22,11 @@
   @apply py-16 -mt-16 border-t border-l border-r border-white;
   background: linear-gradient(-180deg, #faf3ff 0, rgba(143, 0, 255, 0.05) 50%, rgba(143, 0, 255, 0.05) 100%);
   border-radius: 64px 64px 0 0;
+  &.FooterIndex {
+    @apply bg-primaryClearBg;
+    margin: 0;
+    padding: 0;
+  }
 }
 
 .ui- {

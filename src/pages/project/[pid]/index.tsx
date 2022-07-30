@@ -7,7 +7,12 @@ import ProjectPage from '../../../components/Pages/Project/ProjectPage'
 const ReactPlayer = _ReactPlayer as unknown as React.FC<ReactPlayerProps>
 
 const ProjectPageContainer = () => {
-  return <ProjectPage />
+  return (
+    <>
+      <ProjectPage />
+      <div className="h-40"></div>
+    </>
+  )
 }
 
 export default ProjectPageContainer
