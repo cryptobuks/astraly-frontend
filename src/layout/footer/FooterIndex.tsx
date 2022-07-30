@@ -67,13 +67,13 @@ const FooterIndex = () => {
           <FooterCol title="Learn" icon={<UniversityOutline />}>
             <FooterLink href={'/'}>Overview</FooterLink>
             <FooterLink href={'/buy'}>$ASTR Token</FooterLink>
-            <FooterLink href={'/stake'}>Docs</FooterLink>
-            <FooterLink href={'/stake'}>Whitepaper</FooterLink>
+            {/* <FooterLink href={'/stake'}>Docs</FooterLink> */}
+            <FooterLink href={'https://wp.astraly.xyz/'}>Whitepaper</FooterLink>
           </FooterCol>
           <FooterCol title="Community" icon={<HeartOutline />}>
-            <FooterLink href={'/'}>Github</FooterLink>
-            <FooterLink href={'/buy'}>Forum</FooterLink>
-            <FooterLink href={'/stake'}>Crew3</FooterLink>
+            <FooterLink href={'https://github.com/Astraly-Labs'}>Github</FooterLink>
+            <FooterLink href={'/'}>Forum</FooterLink>
+            <FooterLink href={'/'}>Crew3</FooterLink>
           </FooterCol>
           <div className="buy">
             <div className="flex items-center justify-center mb-6">
