@@ -10,6 +10,7 @@ import { useIDOContract } from 'contracts'
 import { Project } from 'interfaces'
 import { uint256 } from 'starknet'
 import { ethers } from 'ethers'
+import { useBlock } from 'context/BlockProvider'
 
 const sales: Sale[] = [
   // {
@@ -38,6 +39,8 @@ const NetworkStatsBlock = () => {
 
   const { getCurrentSale } = useIDOContract()
 
+  const { ethPrice } = useBlock()
+
   const updateSalesInfos = useCallback(async () => {
     if (!finishedProjects) return [0, 0]
     const _salesInfo = await finishedProjects.searchProjects.reduce(
@@ -64,7 +67,6 @@ const NetworkStatsBlock = () => {
   }, [finishedProjects])
 
   useEffect(() => {
-    console.log(finishedProjects, totalAccounts, totalSalesInfo)
     const _stats: NetworkStat[] = [
       {
         title: 'Successful Sales',
@@ -72,7 +74,10 @@ const NetworkStatsBlock = () => {
       },
       {
         title: 'Total $USD Raised',
-        amount: (totalSalesInfo[0] * 1500).toFixed(3),
+        amount: (totalSalesInfo[0] * (ethPrice || 0))
+          .toFixed(0)
+          .toString()
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ','),
       },
       {
         title: 'Total $ETH Raised',
@@ -88,7 +93,7 @@ const NetworkStatsBlock = () => {
       },
     ]
     setStats(_stats)
-  }, [totalAccounts, totalSalesInfo, finishedProjects])
+  }, [totalAccounts, totalSalesInfo, finishedProjects, ethPrice])
 
   return (
     <div className="ui-page-block" id="network">

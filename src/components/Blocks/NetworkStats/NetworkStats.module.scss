@@ -1,7 +1,7 @@
 .StatsGrid {
   @apply md:grid-cols-2;
   @screen lg {
-    grid-template-columns: 190px 1fr 1fr 190px;
+    grid-template-columns: 190px 1fr 1fr 1fr 190px;
   }
 }
 
@@ -9,7 +9,7 @@
   @apply grid;
   grid-template-columns: 1fr 1fr;
   > div {
-    &:nth-child(n+2) {
+    &:nth-child(n + 2) {
       display: none;
     }
     &:last-child {
@@ -18,11 +18,11 @@
   }
   @screen md {
     grid-template-columns: 1fr 1fr 1fr 1fr;
-    >div {
-      &:nth-child(n+2) {
+    > div {
+      &:nth-child(n + 2) {
         display: block;
       }
-      &:nth-child(n+4) {
+      &:nth-child(n + 4) {
         display: none;
       }
 
@@ -34,7 +34,7 @@
   @screen lg {
     grid-template-columns: 160px 130px 80px 80px 80px 120px 120px 120px 1fr;
     > div {
-      &:nth-child(n+4) {
+      &:nth-child(n + 4) {
         display: block;
       }
 
