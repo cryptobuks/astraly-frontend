@@ -9,7 +9,7 @@ import LogoIcon from 'assets/icons/currentColor/LogoA.svg?inline'
 
 const FloatingMenu = () => {
   return (
-    <div className={classNames(styles.FloatingMenu, 'flex flex-col gap-2')} id="network">
+    <div className={classNames(styles.FloatingMenu, 'flex flex-col gap-2')} id="network_">
       <FloatingMenuItem text={'Top'} href={'body'}>
         <CarretIcon />
       </FloatingMenuItem>

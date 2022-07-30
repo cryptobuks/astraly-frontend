@@ -80,7 +80,7 @@ const sales: Sale[] = [
 
 const NetworkStatsBlock = () => {
   return (
-    <div className="ui-page-block">
+    <div className="ui-page-block" id="network">
       <div className="g-container">
         <h2 className="t-block-title t-dark">Network Stats</h2>
         <div className="ml-10">
