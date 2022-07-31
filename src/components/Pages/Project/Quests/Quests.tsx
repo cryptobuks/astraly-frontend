@@ -1,4 +1,3 @@
-import { productQuests, socialQuests } from './quests.mock'
 import BaseButton from 'components/ui/buttons/BaseButton'
 import Lightning from 'assets/icons/currentColor/Lightning-alt.svg?inline'
 import { ForwardIcon } from 'components/ui/Icons/Icons'
@@ -8,6 +7,8 @@ import { Quest } from 'interfaces'
 import { getIcon } from './utils'
 import { useSelector } from 'react-redux'
 import { RootState } from 'stores/reduxStore'
+import { useQuery } from '@apollo/client'
+import { QUESTS } from 'api/gql/querries'
 
 const QuestBlocks = ({
   quests,
@@ -69,18 +70,29 @@ const QuestBlocks = ({
   )
 }
 
-const Quests = () => {
+const Quests = ({
+  socialQuests,
+  productQuests,
+}: {
+  socialQuests: Quest[] | undefined
+  productQuests: Quest[] | undefined
+}) => {
   const [doShowModal, setDoShowModal] = useState(true)
   const [quest, setQuest] = useState<Quest | null>(null)
   const showQuest = (quest: Quest) => {
     setDoShowModal(true)
     setQuest(quest)
   }
+
   return (
     <div className="Quests">
       <QuestModal quest={quest} isOpen={doShowModal} close={() => setDoShowModal(false)} />
-      <QuestBlocks quests={socialQuests} title={'Social Quests'} showQuest={showQuest} />
-      <QuestBlocks quests={productQuests} title={'Product Quests'} showQuest={showQuest} />
+      {socialQuests && (
+        <QuestBlocks quests={socialQuests} title={'Social Quests'} showQuest={showQuest} />
+      )}
+      {productQuests && (
+        <QuestBlocks quests={productQuests} title={'Product Quests'} showQuest={showQuest} />
+      )}
     </div>
   )
 }
