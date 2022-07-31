@@ -16,7 +16,11 @@ const RoadmapItem: React.FC<PropsWithChildren<{ date: string; title: string }>> 
         <div className="title text-24 t-dark">{title}</div>
       </div>
       <div className="hidden md:flex separator mx-8 lg:ml-10 lg:mr-16 flex-shrink-0 flex-col items-center">
-        <img src={StarImage.src} alt={''} className="-mt-8" />
+        <img
+          src={StarImage.src}
+          alt={''}
+          className="-mt-8 transition hover:scale-110 hover:translate-y-1"
+        />
         <div className="w-0.5 h-[97px] bg-whitePurple rounded-full"></div>
       </div>
       <div className="content">{children}</div>

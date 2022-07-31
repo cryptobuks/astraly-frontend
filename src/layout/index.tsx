@@ -59,6 +59,7 @@ export default function Layout({ children }: PropsWithChildren<any>) {
 
         <>{children}</>
 
+        <div className="h-20"></div>
         <div className="mt-auto">
           <FooterIndex />
         </div>

@@ -11,7 +11,7 @@ const RoadmapBlock = () => {
         <div className="ml-10">
           <RoadmapItem date="Q2 2022" title="Launch">
             <div className="flex flex-col lg:flex-row gap-6">
-              <div className="block-no-bg text-white p-8 font-bold flex flex-col bg-primary border-primary ui-glow-text 2xl:min-w-[448px]">
+              <div className="block-no-bg text-white p-8 font-bold flex flex-col bg-primary border-primary ui-glow-text 2xl:min-w-[448px] hover">
                 <h4 className="title ui-small-title text-white">
                   <div className="icon mr-1">
                     <BoltIcon />
@@ -26,7 +26,7 @@ const RoadmapBlock = () => {
                 </ul>
               </div>
 
-              <div className="block p-8 2xl:min-w-[300px] font-bold">
+              <div className="block p-8 2xl:min-w-[300px] font-bold hover group">
                 <h4 className="title ui-small-title mb-4 ui-t-primary">
                   <div className="icon mr-1">
                     <BoltIcon />
@@ -34,7 +34,7 @@ const RoadmapBlock = () => {
                   Ongoing
                 </h4>
 
-                <ul className="mt-auto list-disc ml-3">
+                <ul className="mt-auto list-disc ml-3 group-hover:ui-t-primary transition">
                   <li>Seed round;</li>
                   <li>Private sale;</li>
                   <li>Website reveal ;</li>
@@ -45,7 +45,7 @@ const RoadmapBlock = () => {
           </RoadmapItem>
 
           <RoadmapItem date="Q3 2022" title="First IDOs">
-            <div className="block p-8">
+            <div className="block p-8 hover group">
               <h4 className="title">
                 <div className="icon mr-1">
                   <SandWatch />
@@ -53,7 +53,7 @@ const RoadmapBlock = () => {
                 Not started
               </h4>
 
-              <ul>
+              <ul className="group-hover:ui-t-primary transition">
                 <li>Audit ;</li>
                 <li>Staking ;</li>
                 <li>First IDOs ;</li>
@@ -65,7 +65,7 @@ const RoadmapBlock = () => {
           </RoadmapItem>
 
           <RoadmapItem date="Q4 2022" title="Governance">
-            <div className="block p-8">
+            <div className="block p-8 hover group">
               <h4 className="title">
                 <div className="icon mr-1">
                   <SandWatch />
@@ -73,7 +73,7 @@ const RoadmapBlock = () => {
                 Not started
               </h4>
 
-              <ul>
+              <ul className="group-hover:ui-t-primary transition">
                 <li>Launch of the $ASTR token;</li>
                 <li>Release of the full features of Astraly;</li>
                 <li>Launch of the soulbound token issuing platform;</li>
@@ -83,7 +83,7 @@ const RoadmapBlock = () => {
           </RoadmapItem>
 
           <RoadmapItem date="2023" title="Astraly 2.0">
-            <div className="block p-8">
+            <div className="block p-8 hover group">
               <h4 className="title">
                 <div className="icon mr-1">
                   <SandWatch />
@@ -91,7 +91,7 @@ const RoadmapBlock = () => {
                 Not started
               </h4>
 
-              <ul>
+              <ul className="group-hover:ui-t-primary transition">
                 <li>Mobile App;</li>
                 <li>Fees redistribution;</li>
                 <li>Cross-rollups deployment;</li>

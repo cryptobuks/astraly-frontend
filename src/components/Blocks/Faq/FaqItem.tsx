@@ -8,7 +8,7 @@ const FaqItem: React.FC<PropsWithChildren<{ question: string }>> = ({ question, 
 
   return (
     <div
-      className="FaqItem mb-6 block px-8 py-6 min-h-[84px] items-center flex cursor-pointer"
+      className="FaqItem mb-6 block px-8 py-6 min-h-[84px] items-center flex cursor-pointer hover"
       onClick={() => setIsOpen(!isOpen)}>
       <div className="w-full">
         <div

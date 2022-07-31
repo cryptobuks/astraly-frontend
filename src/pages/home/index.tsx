@@ -24,7 +24,7 @@ const Home = () => {
   })
 
   return (
-    <div>
+    <div className="-mb-20">
       <div className="my-20 w-full overflow-hidden">
         <StatsBar />
       </div>
