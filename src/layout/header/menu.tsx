@@ -61,10 +61,10 @@ const Links = [
     href: '/',
   },
   {
-    text: 'Launchpad',
+    text: 'Souldrop',
     iconOutline: <Launchpad />,
     iconSolid: <LaunchpadFull />,
-    href: '/launchpad',
+    href: '/souldrop',
   },
   {
     text: 'Lock',

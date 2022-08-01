@@ -16,10 +16,16 @@ import FloatingMenu from '../../components/ui/FloatingMenu/FloatingMenu'
 
 const Home = () => {
   const [search, setSearch] = useState('')
-  const { loading, error, data } = useQuery(SEARCH_PROJECTS, {
+  const { data } = useQuery(SEARCH_PROJECTS, {
     variables: {
       search,
       finished: false,
+    },
+  })
+  const { data: finishedProjects } = useQuery(SEARCH_PROJECTS, {
+    variables: {
+      search,
+      finished: true,
     },
   })
 
@@ -40,6 +46,15 @@ const Home = () => {
       </Container>
 
       {data && data.searchProjects.length > 0 && <ProjectsSlider projects={data.searchProjects} />}
+      <div className="h-16"></div>
+      <div className="ui-page-block">
+        <Container>
+          <h2 className="text-24 text-primaryClear font-heading mb-6 mt-8">FINISHED PROJECTS</h2>
+        </Container>
+        {finishedProjects?.searchProjects.length > 0 && (
+          <ProjectsSlider projects={finishedProjects.searchProjects} />
+        )}
+      </div>
 
       <div className="h-16"></div>
       <RoadmapBlock />
