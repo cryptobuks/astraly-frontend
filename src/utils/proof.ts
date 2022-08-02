@@ -1,4 +1,3 @@
-import { ethers } from 'ethers'
 import { Provider } from 'starknet'
 import { number } from 'starknet'
 import Web3 from 'web3'
@@ -14,6 +13,7 @@ export const createProofData = async (
   tokenBalanceMin: number.BigNumberish,
   publicEthAddress: string,
   privateEthAddress: string,
+  l2AccountAddress: string,
   rpcHttp: string
 ): Promise<any> => {
   try {
@@ -33,11 +33,15 @@ export const createProofData = async (
     const stateRoot = w3.utils.toHex(block.stateRoot)
     const storageKey = w3.utils.toHex(proof['storageProof'][0]['key']).slice(2)
 
-    const msg = `"000000000000000000000000000000${publicEthAddress.slice(2)}${stateRoot.slice(
+    l2AccountAddress = l2AccountAddress.startsWith('0x')
+      ? l2AccountAddress.slice(2)
+      : l2AccountAddress
+    const msg = `000000000000000000000000000000${publicEthAddress.slice(2)}${stateRoot.slice(
       2
-    )}${storageKey}00000000"`
+    )}${storageKey}00000000${l2AccountAddress}`
+
     // TODO: sign with connected account
-    const signedMessage = w3.eth.accounts.sign(msg, '0x')
+    const signedMessage = w3.eth.accounts.sign(msg, privateEthAddress)
 
     const return_proof: any = { ...proof }
     return_proof['blockNumber'] = blockNumber
