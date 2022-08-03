@@ -1,11 +1,6 @@
-import { Provider } from 'starknet'
 import { number } from 'starknet'
 import Web3 from 'web3'
-
-const isMainnet = process.env.REACT_APP_ENV === 'MAINNET'
-
-const networkName = isMainnet ? 'mainnet-alpha' : 'goerli-alpha'
-const provider = new Provider({ network: networkName })
+import { provider } from 'web3-core';
 
 export const createProofData = async (
   blockNumber = 14987112,
@@ -14,10 +9,10 @@ export const createProofData = async (
   publicEthAddress: string,
   privateEthAddress: string,
   l2AccountAddress: string,
-  rpcHttp: string
+  rpcProvider: provider
 ): Promise<any> => {
   try {
-    const w3 = new Web3(new Web3.providers.HttpProvider(rpcHttp))
+    const w3 = new Web3(rpcProvider) // Inject browser provider (user wallet)
 
     const slot = String(0).padEnd(64, '0')
     const key = privateEthAddress.slice(2).padEnd(64, '0').toLowerCase()
@@ -41,7 +36,7 @@ export const createProofData = async (
     )}${storageKey}00000000${l2AccountAddress}`
 
     // TODO: sign with connected account
-    const signedMessage = w3.eth.accounts.sign(msg, privateEthAddress)
+    const signedMessage = await w3.eth.sign(msg, w3.defaultAccount as string)
 
     const return_proof: any = { ...proof }
     return_proof['blockNumber'] = blockNumber
@@ -51,10 +46,7 @@ export const createProofData = async (
     return_proof['storageSlot'] = slot
     return_proof['signature'] = {
       message: '0x' + msg,
-      messageHash: w3.utils.toHex(signedMessage.messageHash || ''),
-      r: signedMessage.r,
-      s: signedMessage.s,
-      v: signedMessage.v,
+      messageHash: w3.utils.toHex(signedMessage || '')
     }
 
     return return_proof
