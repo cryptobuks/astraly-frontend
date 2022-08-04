@@ -1,57 +1,62 @@
-import { number } from 'starknet'
-import Web3 from 'web3'
-import { provider } from 'web3-core';
+import { sha3Raw, stripHexPrefix, toHex, padLeft, toBN } from 'web3-utils'
+import { utils } from 'ethers'
 
-export const createProofData = async (
-  blockNumber = 14987112,
-  tokenAddress = '0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72',
-  tokenBalanceMin: number.BigNumberish,
-  publicEthAddress: string,
-  privateEthAddress: string,
-  l2AccountAddress: string,
-  rpcProvider: provider
-): Promise<any> => {
-  try {
-    const w3 = new Web3(rpcProvider) // Inject browser provider (user wallet)
+export async function buildProofInput(
+  provider: any,
+  keyAddress: string,
+  creatorAddress: string,
+  token: string = '0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72',
+  blockNumber: number = 14987112,
+  storageSlot: string,
+  tokenBalanceMin: string
+) {
+  const number = '0x' + blockNumber.toString(16)
+  console.log(number)
+  const block = await provider?.send('eth_getBlockByNumber', [number, false])
+  console.log(block)
 
-    const slot = String(0).padEnd(64, '0')
-    const key = privateEthAddress.slice(2).padEnd(64, '0').toLowerCase()
-    const position = w3.utils.keccak256(key + slot)
-    const block = await w3.eth.getBlock(blockNumber)
-    const proof = await w3.eth.getProof(tokenAddress, [position], blockNumber)
-    const balance = await w3.eth.getStorageAt(tokenAddress, position)
+  // Prepare message attestation contents
+  let pos = padLeft(stripHexPrefix(keyAddress.toLowerCase()), 64)
+  pos += padLeft(stripHexPrefix(toHex(storageSlot)), 64)
+  const storageKey = sha3Raw('0x' + pos)
 
-    console.log('Generating proof of balance', balance)
+  // Sign attestation message
+  const message =
+    stripHexPrefix(creatorAddress) + stripHexPrefix(block.stateRoot) + stripHexPrefix(storageKey)
+  const paddedMessage = '000000000000000000000000000000' + message + '00000000'
+  const eip191_message =
+    '19457468657265756d205369676e6564204d6573736167653a0a313033' + paddedMessage
+  const rawSignature = await provider?.getSigner().signMessage(paddedMessage)
+  const signature = utils.splitSignature(rawSignature)
+  const r = signature.r
+  const s = signature.s
+  const v: 27 | 28 = signature.recoveryParam === 0 ? 27 : 28
 
-    // Sign a message demonstrating control over the storage slot
-    // Pad the message with zeros to align 64bit word size in Cairo
-    const stateRoot = w3.utils.toHex(block.stateRoot)
-    const storageKey = w3.utils.toHex(proof['storageProof'][0]['key']).slice(2)
+  // Request storage state proof
+  const proof = await provider?.send('eth_getProof', [token, [storageKey], number])
+  const accountProof = proof.accountProof
+  const storageProof = proof.storageProof[0]
 
-    l2AccountAddress = l2AccountAddress.startsWith('0x')
-      ? l2AccountAddress.slice(2)
-      : l2AccountAddress
-    const msg = `000000000000000000000000000000${publicEthAddress.slice(2)}${stateRoot.slice(
-      2
-    )}${storageKey}00000000${l2AccountAddress}`
+  const json = JSON.stringify({
+    accountProof: [accountProof],
+    address: token,
+    balance: 0,
+    codeHash: proof.codeHash,
+    nonce: 1,
+    storageHash: proof.storageHash,
+    storageProof: [storageProof],
+    blockNumber: blockNumber,
+    publicEthAddress: toBN(creatorAddress),
+    tokenBalanceMin: tokenBalanceMin,
+    stateRoot: block.stateRoot,
+    storageSlot: pos,
+    signature: {
+      message: eip191_message,
+      r: r,
+      s: s,
+      v: v,
+    },
+  })
 
-    // TODO: sign with connected account
-    const signedMessage = await w3.eth.sign(msg, w3.defaultAccount as string)
-
-    const return_proof: any = { ...proof }
-    return_proof['blockNumber'] = blockNumber
-    return_proof['publicEthAddress'] = publicEthAddress
-    return_proof['tokenBalanceMin'] = tokenBalanceMin
-    return_proof['stateRoot'] = stateRoot
-    return_proof['storageSlot'] = slot
-    return_proof['signature'] = {
-      message: '0x' + msg,
-      messageHash: w3.utils.toHex(signedMessage || '')
-    }
-
-    return return_proof
-  } catch (error) {
-    console.error(error)
-    return false
-  }
+  return json
 }
