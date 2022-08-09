@@ -1,62 +1,121 @@
 import { sha3Raw, stripHexPrefix, toHex, padLeft, toBN } from 'web3-utils'
 import { utils } from 'ethers'
 
-export async function buildProofInput(
+export async function encodeCallArgs(
   provider: any,
-  keyAddress: string,
-  creatorAddress: string,
-  token: string = '0xC18360217D8F7Ab5e7c516566761Ea12Ce7F9D72',
-  blockNumber: number = 14987112,
+  chainId: number,
+  ethAccount: string,
+  starknetAccount_: string,
+  token: string,
+  blockNumber: number,
   storageSlot: string,
-  tokenBalanceMin: string
+  balance: string,
 ) {
-  const number = '0x' + blockNumber.toString(16)
-  console.log(number)
-  const block = await provider?.send('eth_getBlockByNumber', [number, false])
-  console.log(block)
+  const number = "0x"+blockNumber.toString(16)
+  const block = await provider?.send("eth_getBlockByNumber", [number, false]);
+
+  console.log(block);
 
   // Prepare message attestation contents
-  let pos = padLeft(stripHexPrefix(keyAddress.toLowerCase()), 64)
+  let pos = padLeft(stripHexPrefix(ethAccount.toLowerCase()), 64)
   pos += padLeft(stripHexPrefix(toHex(storageSlot)), 64)
-  const storageKey = sha3Raw('0x' + pos)
+  const storageKey = sha3Raw("0x"+pos)
+  const starknetAccount = stripHexPrefix(starknetAccount_);
+  const stateRoot = stripHexPrefix(block.stateRoot);
 
   // Sign attestation message
-  const message =
-    stripHexPrefix(creatorAddress) + stripHexPrefix(block.stateRoot) + stripHexPrefix(storageKey)
-  const paddedMessage = '000000000000000000000000000000' + message + '00000000'
-  const eip191_message =
-    '19457468657265756d205369676e6564204d6573736167653a0a313033' + paddedMessage
-  const rawSignature = await provider?.getSigner().signMessage(paddedMessage)
-  const signature = utils.splitSignature(rawSignature)
-  const r = signature.r
-  const s = signature.s
-  const v: 27 | 28 = signature.recoveryParam === 0 ? 27 : 28
+  const message = starknetAccount + stateRoot + stripHexPrefix(storageKey);
+  const paddedMessage = "000000" + message + "00000000";
+  let packedMessage : Array<BN> = [
+    toBN("1820989616068650357"),
+    toBN("7863376661560845668"),
+    toBN("2327628128951822181"),
+    toBN("4182209287050756096")];
+  packedMessage.push(...packInts64(paddedMessage));
+  const rawSignature = await provider?.getSigner().signMessage(paddedMessage);
+  const signature = utils.splitSignature(rawSignature);
+
+  // Derive the y-coordinate of the elliptic curve point
+  const Rx = BigInt("0x"+toBN(signature.r).toJSON());
+  const recoveryParam : 0|1 = signature.recoveryParam === 0 ? 0 : 1;
+  const Ry = secp256k1.decompressPoint(Rx, recoveryParam);
+  console.log("Rx", Rx);
+  console.log("Ry", Ry);
 
   // Request storage state proof
-  const proof = await provider?.send('eth_getProof', [token, [storageKey], number])
-  const accountProof = proof.accountProof
-  const storageProof = proof.storageProof[0]
+  const proof = await provider?.send("eth_getProof", [
+      token,
+      [storageKey],
+      number]);
+  const accountProof = proof.accountProof;
+  const storageProof = proof.storageProof[0];
+  const [
+    accountProofsConcat,
+    accountProofSizesWords,
+    accountProofSizesBytes] = encodeProof(accountProof);
+  const [
+    storageProofsConcat,
+    storageProofSizesWords,
+    storageProofSizesBytes] = encodeProof(storageProof.proof);
+  console.log(proof);
 
-  const json = JSON.stringify({
-    accountProof: [accountProof],
-    address: token,
-    balance: 0,
-    codeHash: proof.codeHash,
-    nonce: 1,
-    storageHash: proof.storageHash,
-    storageProof: [storageProof],
-    blockNumber: blockNumber,
-    publicEthAddress: toBN(creatorAddress),
-    tokenBalanceMin: tokenBalanceMin,
-    stateRoot: block.stateRoot,
-    storageSlot: pos,
-    signature: {
-      message: eip191_message,
-      r: r,
-      s: s,
-      v: v,
-    },
-  })
+  console.log(toBN(starknetAccount_))
+  console.log(toBN(balance))
+  console.log(1) // chain id
+  console.log(blockNumber)
+  console.log(accountProof.length)
+  console.log(storageProof.proof.length)
+  console.log(packInts64(stripHexPrefix(token))) // address
+  console.log(packInts64(stripHexPrefix(block.stateRoot)))
+  console.log(packInts64(stripHexPrefix(proof.codeHash)))
+  console.log(packInts64(padLeft(stripHexPrefix(toHex(storageSlot)), 64)))
+  console.log(packBigInt3(stripHexPrefix(proof.storageHash)))
+  // Signed state signature
+  console.log(packedMessage)
+  console.log(132) // message_byte_len
+  console.log(packBigInt3(stripHexPrefix(Rx.toString())))
+  console.log(packBigInt3(stripHexPrefix(Ry.toString())))
+  console.log(packBigInt3(stripHexPrefix(signature.s)))
+  console.log(signature.recoveryParam + 27)
+  console.log(packInts64(stripHexPrefix(storageProof.key)))
+  console.log(packInts64(stripHexPrefix(storageProof.value)))
+  // Account proof
+  console.log(accountProofsConcat)
+  console.log(accountProofSizesWords)
+  console.log(accountProofSizesBytes)
+  // Storage proof
+  console.log(storageProofsConcat)
+  console.log(storageProofSizesWords)
+  console.log(storageProofSizesBytes)
 
-  return json
+  return [
+    toBN(starknetAccount_),
+    toBN(balance),
+    1, // chain id
+    blockNumber,
+    accountProof.length,
+    storageProof.proof.length,
+    packInts64(stripHexPrefix(token)), // address
+    packInts64(stripHexPrefix(block.stateRoot)),
+    packInts64(stripHexPrefix(proof.codeHash)),
+    packInts64(padLeft(stripHexPrefix(toHex(storageSlot)), 64)),
+    packBigInt3(stripHexPrefix(proof.storageHash)),
+    // Signed state signature
+    packedMessage,
+    132, // message_byte_len
+    packBigInt3(stripHexPrefix(Rx.toString())),
+    packBigInt3(stripHexPrefix(Ry.toString())),
+    packBigInt3(stripHexPrefix(signature.s)),
+    signature.recoveryParam + 27,
+    packInts64(stripHexPrefix(storageProof.key)),
+    packInts64(stripHexPrefix(storageProof.value)),
+    // Account proof
+    accountProofsConcat,
+    accountProofSizesWords,
+    accountProofSizesBytes,
+    // Storage proof
+    storageProofsConcat,
+    storageProofSizesWords,
+    storageProofSizesBytes,
+  ];
 }
