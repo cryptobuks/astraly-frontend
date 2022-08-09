@@ -29,6 +29,7 @@
     "@web3-starknet-react/argentx-connector": "^1.1.0",
     "@web3-starknet-react/braavos-connector": "^2.0.0",
     "@web3-starknet-react/core": "^2.0.0",
+    "@zoltu/ethereum-crypto": "^2.2.2",
     "axios": "^0.26.1",
     "classnames": "^2.3.1",
     "date-fns": "^2.28.0",
