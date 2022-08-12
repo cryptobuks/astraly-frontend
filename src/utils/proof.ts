@@ -1,6 +1,7 @@
 import { sha3Raw, stripHexPrefix, toHex, padLeft, toBN } from 'web3-utils'
 import { utils } from 'ethers'
 import { secp256k1 } from '@zoltu/ethereum-crypto'
+
 import * as BN from 'bn.js'
 
 function packInts64(input: string): Array<BN> {
@@ -41,26 +42,51 @@ function encodeProof(proof: Array<string>) {
 }
 
 export async function encodeCallArgs(
-  provider: any,
-  chainId: number,
-  ethAccount: string,
-  starknetAccount_: string,
+  ethereum: any,
+  signer: any,
+  account: any,
+  starknetAccount: string,
   token: string,
   blockNumber: number,
-  storageSlot: string,
+  storageSlot: number,
   balance: string
 ) {
+  // eslint-disable-next-line no-undef
+  if (!ethereum) {
+    /// https://eips.ethereum.org/EIPS/eip-1102
+    console.error('No Provider detected')
+    return
+  }
+
   const number = '0x' + blockNumber.toString(16)
-  const block = await provider?.send('eth_getBlockByNumber', [number, false])
+  const block = (await ethereum.send('eth_getBlockByNumber', [number, false])).result
 
   console.log(block)
 
   // Prepare message attestation contents
-  let pos = padLeft(stripHexPrefix(ethAccount.toLowerCase()), 64)
+  let pos = padLeft(stripHexPrefix(account.toLowerCase()), 64)
   pos += padLeft(stripHexPrefix(toHex(storageSlot)), 64)
   const storageKey = sha3Raw('0x' + pos)
-  const starknetAccount = stripHexPrefix(starknetAccount_)
+  starknetAccount = stripHexPrefix(starknetAccount)
   const stateRoot = stripHexPrefix(block.stateRoot)
+
+  const userCurrentBalance = (await ethereum.send('eth_getStorageAt', [token, storageKey, number]))
+    .result
+  /// TODO: check denomination
+  if (!toBN(userCurrentBalance).eq(toBN(balance))) {
+    console.log("User balance doesn't match")
+    return
+  }
+
+  // Request storage state proof
+  const proof = (await ethereum.send('eth_getProof', [token, [storageKey], number])).result
+  const accountProof = proof.accountProof
+  const storageProof = proof.storageProof[0]
+  const [accountProofsConcat, accountProofSizesWords, accountProofSizesBytes] =
+    encodeProof(accountProof)
+  const [storageProofsConcat, storageProofSizesWords, storageProofSizesBytes] = encodeProof(
+    storageProof.proof
+  )
 
   // Sign attestation message
   const message = starknetAccount + stateRoot + stripHexPrefix(storageKey)
@@ -72,7 +98,7 @@ export async function encodeCallArgs(
     toBN('4182209287050756096'),
   ]
   packedMessage.push(...packInts64(paddedMessage))
-  const rawSignature = await provider?.getSigner().signMessage(paddedMessage)
+  const rawSignature = await signer.signMessage(paddedMessage)
   const signature = utils.splitSignature(rawSignature)
 
   // Derive the y-coordinate of the elliptic curve point
@@ -82,20 +108,11 @@ export async function encodeCallArgs(
   console.log('Rx', Rx)
   console.log('Ry', Ry)
 
-  // Request storage state proof
-  const proof = await provider?.send('eth_getProof', [token, [storageKey], number])
-  const accountProof = proof.accountProof
-  const storageProof = proof.storageProof[0]
-  const [accountProofsConcat, accountProofSizesWords, accountProofSizesBytes] =
-    encodeProof(accountProof)
-  const [storageProofsConcat, storageProofSizesWords, storageProofSizesBytes] = encodeProof(
-    storageProof.proof
-  )
   console.log(proof)
 
-  console.log(toBN(starknetAccount_))
+  console.log(toBN(starknetAccount))
   console.log(toBN(balance))
-  console.log(1) // chain id
+  console.log(parseInt(ethereum.chainId, 16)) // chain id
   console.log(blockNumber)
   console.log(accountProof.length)
   console.log(storageProof.proof.length)
@@ -123,9 +140,9 @@ export async function encodeCallArgs(
   console.log(storageProofSizesBytes)
 
   return [
-    toBN(starknetAccount_),
+    toBN(starknetAccount),
     toBN(balance),
-    1, // chain id
+    parseInt(ethereum.chainId, 16), // chain id
     blockNumber,
     accountProof.length,
     storageProof.proof.length,
