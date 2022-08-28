@@ -16,6 +16,11 @@ import DiscordIcon from 'assets/icons/currentColor/Discord.svg?inline'
 import SiteIcon from 'assets/icons/currentColor/Explore.svg?inline'
 
 const ProjectInfos: React.FC<{ project: Project }> = ({ project }) => {
+  const linksByKey = project.links?.reduce((acc, x) => {
+    // @ts-ignore
+    acc[x.key] = x.value
+    return acc
+  }, {} as any)
   return (
     <div className="ProjectInfos sticky top-6 left-0">
       <div className="block mb-4">
@@ -68,27 +73,35 @@ const ProjectInfos: React.FC<{ project: Project }> = ({ project }) => {
         <div className="block__item">
           <div className="title--small">Links</div>
           <div className="flex gap-2">
-            <Link href={'https://briq.construction/'}>
-              <a target="_blank" className="hover:scale-110 transition transform">
-                <Hexagon>
-                  <SiteIcon width="28" height="28" viewBox="0 0 24 24" />
-                </Hexagon>
-              </a>
-            </Link>
-            <Link href={'https://twitter.com/briqnft'}>
-              <a target="_blank" className="hover:scale-110 transition transform">
-                <Hexagon>
-                  <TwitterIcon />
-                </Hexagon>
-              </a>
-            </Link>
-            <Link href={'https://discord.com/invite/kpvbDCw5pr'}>
-              <a target="_blank" className="hover:scale-110 transition transform">
-                <Hexagon>
-                  <DiscordIcon />
-                </Hexagon>
-              </a>
-            </Link>
+            {linksByKey['site'] && (
+              <Link href={linksByKey['site']}>
+                <a target="_blank" className="hover:scale-110 transition transform">
+                  <Hexagon>
+                    <SiteIcon width="28" height="28" viewBox="0 0 24 24" />
+                  </Hexagon>
+                </a>
+              </Link>
+            )}
+
+            {linksByKey.twitter && (
+              <Link href={linksByKey.twitter}>
+                <a target="_blank" className="hover:scale-110 transition transform">
+                  <Hexagon>
+                    <TwitterIcon />
+                  </Hexagon>
+                </a>
+              </Link>
+            )}
+
+            {linksByKey.discord && (
+              <Link href={linksByKey.discord}>
+                <a target="_blank" className="hover:scale-110 transition transform">
+                  <Hexagon>
+                    <DiscordIcon />
+                  </Hexagon>
+                </a>
+              </Link>
+            )}
           </div>
         </div>
 
@@ -101,7 +114,7 @@ const ProjectInfos: React.FC<{ project: Project }> = ({ project }) => {
           <div className="title--small">Admission</div>
           <p className="text-primaryClear">
             <ol>
-              <li>Have locked $ASTR tokens</li>
+              <li>{project.admission}</li>
             </ol>
           </p>
         </div>
