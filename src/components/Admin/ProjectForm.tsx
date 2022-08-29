@@ -16,6 +16,7 @@ const ProjectForm: FC<{ project: Project }> = ({ project }) => {
   const [projectForm, setProjectForm] = useState({} as Project)
   const [title, setTitle] = useState('New project')
   const [saveMutation] = useMutation(UPDATE_PROJECT)
+  const [mediaUrl, setMediaUrl] = useState('')
 
   const saveProject = async () => {
     saveMutation({
@@ -300,6 +301,13 @@ const ProjectForm: FC<{ project: Project }> = ({ project }) => {
           </div>
         ))}
         <h3>Content</h3>
+        <ImageUpload
+          src={mediaUrl}
+          onChange={({ filePath }) => {
+            setMediaUrl(filePath)
+          }}
+        />
+        {mediaUrl}
         <AdminInputGroup left={<span>Highlights</span>} onClick={() => {}}>
           <textarea onChange={setDescription('Highlights')} value={getDescription('Highlights')} />
         </AdminInputGroup>
