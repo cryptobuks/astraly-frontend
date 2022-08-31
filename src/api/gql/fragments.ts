@@ -105,6 +105,7 @@ export const QuestFragment = gql`
     link
     name
     type
+    icon
     event {
       callData {
         name
