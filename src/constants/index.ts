@@ -14,8 +14,8 @@ export const PrivacyPolicyLink = '#'
 export const ContactEmail = 'contact@zkpadfi.io'
 export const ApiContact = 'https://zkpad-api.herokuapp.com/contact/save'
 export const VoyagerLink = `https://${
-  process.env.REACT_APP_ENV === 'TESTNET' && 'testnet'
-}.starkscan.co`
+  process.env.REACT_APP_ENV === 'TESTNET' ? 'testnet.' : ''
+}starkscan.co`
 
 export const REWARDS_PER_BLOCK = 10
 export const BLOCKS_PER_YEAR = 429240
